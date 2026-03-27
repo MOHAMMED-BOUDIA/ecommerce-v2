@@ -14,6 +14,9 @@ const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
 const Profile = lazy(() => import('../pages/Profile'));
 const NotFound = lazy(() => import('../pages/NotFound'));
+const NewArrivals = lazy(() => import('../pages/NewArrivals'));
+const TacticalGears = lazy(() => import('../pages/TacticalGears'));
+const TheLab = lazy(() => import('../pages/TheLab'));
 
 /**
  * Premium Router Configuration
@@ -65,6 +68,26 @@ export const router = createBrowserRouter([
       {
         path: '404',
         element: <LoadingWrapper><NotFound /></LoadingWrapper>,
+      },
+      {
+        path: 'new-arrivals',
+        element: <LoadingWrapper><NewArrivals /></LoadingWrapper>,
+      },
+      {
+        path: 'tactical-gears',
+        element: <LoadingWrapper><TacticalGears /></LoadingWrapper>,
+      },
+      {
+        path: 'the-lab',
+        element: <LoadingWrapper><TheLab /></LoadingWrapper>,
+      },
+      {
+        path: 'categories/tactical',
+        element: <Navigate to="/tactical-gears" replace />,
+      },
+      {
+        path: 'about',
+        element: <Navigate to="/the-lab" replace />,
       },
       {
         path: '*',

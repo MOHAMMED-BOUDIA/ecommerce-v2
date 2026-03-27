@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import {
   HiOutlineArrowRight,
   HiOutlineCubeTransparent,
@@ -114,11 +114,148 @@ const ColumnSection = ({ column, colIdx }) => {
   );
 };
 
+import Globe from "react-globe.gl";
+
+// --- INTERACTIVE GLOBE SYSTEM (WebGL ENGINE) ---
+const TrueGlobe = ({ activeCity, onResetSelection }) => {
+  const globeRef = useRef();
+
+  const cities = {
+    "Tokyo-01": { lat: 35.6762, lng: 139.6503, label: "TKY_01" },
+    "Berlin-IX": { lat: 52.52, lng: 13.405, label: "BER_IX" },
+    "Brooklyn-04": { lat: 40.7128, lng: -74.006, label: "BKN_04" },
+    "Seoul-Core": { lat: 37.5665, lng: 126.978, label: "SEL_C" }
+  };
+
+  const globeData = Object.keys(cities).map(key => ({
+    ...cities[key],
+    name: key,
+    size: 0.15,
+    color: activeCity === key ? "#10b981" : "#ffffff22"
+  }));
+
+  React.useEffect(() => {
+    if (globeRef.current) {
+      // Configuration for auto-rotation and premium feel
+      const controls = globeRef.current.controls();
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.6;
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.1;
+      controls.enableZoom = false; // Keep fixed for premium layout
+    }
+  }, []);
+
+  React.useEffect(() => {
+    let timeoutId;
+
+    if (activeCity && cities[activeCity] && globeRef.current) {
+      const { lat, lng } = cities[activeCity];
+
+      // Stage 1: Cinematic Zoom In (surveillance focus)
+      globeRef.current.pointOfView({ lat, lng, altitude: 0.6 }, 2500);
+
+      const controls = globeRef.current.controls();
+      controls.autoRotate = false;
+
+      // Stage 2: Automatic Reset After Focused View
+      timeoutId = setTimeout(() => {
+        if (globeRef.current) {
+          // Smoothly zoom out to background global view (altitude 2.5)
+          globeRef.current.pointOfView({ altitude: 2.5 }, 3000);
+
+          // Re-engage auto-rotate
+          const controls = globeRef.current.controls();
+          controls.autoRotate = true;
+          controls.autoRotateSpeed = 0.4;
+
+          // Clear active state in parent via callback
+          if (onResetSelection) onResetSelection();
+        }
+      }, 5000); // 5 seconds of focused view
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [activeCity]);
+
+  return (
+    <div className="relative w-full aspect-square max-w-[600px] flex items-center justify-center cursor-move">
+      {/* 3D Atmosphere Bloom */}
+      <div className="absolute inset-0 rounded-full bg-emerald-500/10 blur-[150px] animate-pulse-slow pointer-events-none" />
+
+      <Globe
+        ref={globeRef}
+        width={600}
+        height={600}
+        backgroundColor="rgba(0,0,0,0)"
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+        pointsData={globeData}
+        pointAltitude={0.2}
+        pointColor="color"
+        pointRadius="size"
+        pointsMerge={true}
+        pointLabel="label"
+        // High-Def Highlighting
+        ringsData={activeCity && cities[activeCity] ? [cities[activeCity]] : []}
+        ringColor={() => '#10b981'}
+        ringMaxRadius={2.5}
+        ringPropagationSpeed={3}
+        ringRepeat={3}
+        // Premium Atmosphere / Definition
+        showAtmosphere={true}
+        atmosphereColor="#10b981"
+        atmosphereAltitude={0.15}
+        showGraticules={true}
+      />
+
+      {/* High-Contrast Technical HUD Metadata */}
+      <div className="absolute -right-16 top-0 space-y-4 opacity-100 select-none pointer-events-none">
+        <div className="backdrop-blur-2xl bg-slate-900/60 p-6 rounded-[2rem] border border-white/10 shadow-2xl space-y-4 min-w-[180px]">
+          <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Telemetry</span>
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+          </div>
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <span className="text-[8px] font-bold text-emerald-500/50 uppercase tracking-widest">Longitude</span>
+              <div className="text-[12px] font-mono text-white tracking-[0.2em]">{cities[activeCity]?.lng.toFixed(4)}°</div>
+            </div>
+            <div className="space-y-1">
+              <span className="text-[8px] font-bold text-emerald-500/50 uppercase tracking-widest">Latitude</span>
+              <div className="text-[12px] font-mono text-white tracking-[0.2em]">{cities[activeCity]?.lat.toFixed(4)}°</div>
+            </div>
+          </div>
+          <div className="pt-4 border-t border-white/5">
+            <div className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Vanguard_Link::Connected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 const Home = () => {
+  const [activeCity, setActiveCity] = useState(null);
+  const [bgIndex, setBgIndex] = useState(0);
+
+  const heroImages = [
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070",
+    "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=2070",
+    "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=2070",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2070"
+  ];
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % heroImages.length);
+    }, 10000); // 10 seconds per image
+    return () => clearInterval(timer);
+  }, []);
 
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   return (
     <div className="bg-white overflow-hidden relative">
@@ -131,27 +268,29 @@ const Home = () => {
         style={{ scaleX: scrollYProgress }}
       />
 
-      {/* SYSTEM HUD (TOP RIGHT) */}
-      <div className="fixed top-24 right-10 z-[60] hidden xl:flex flex-col items-end gap-2 blend-soft-light mix-blend-difference pointer-events-none">
-        <div className="flex items-center gap-3">
-          <span className="text-[8px] font-bold text-white uppercase tracking-widest opacity-40 italic">ARCHIVE_SYNC_ACTIVE</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        </div>
-        <div className="text-[8px] font-bold text-white uppercase tracking-widest opacity-40 italic">NODE: VANGUARD_TOKYO_01</div>
-        <div className="text-[8px] font-bold text-white uppercase tracking-widest opacity-40 italic">STABILIZATION: 99.82%</div>
-      </div>
       {/* 1. CINEMATIC HERO */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-slate-950">
         <motion.div
           style={{ y: y1 }}
-          className="absolute inset-0 z-0 opacity-40"
+          className="absolute inset-0 z-0"
         >
-          <img
-            src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070"
-            alt="Technical Background"
-            className="w-full h-full object-cover scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/60 to-slate-950" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={bgIndex}
+              initial={{ opacity: 0, scale: 1.15, filter: "blur(20px)" }}
+              animate={{ opacity: 0.4, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+              transition={{ duration: 3.5, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0"
+            >
+              <img
+                src={heroImages[bgIndex]}
+                alt="Technical Background"
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/60 to-slate-950 z-10" />
         </motion.div>
 
         <div className="container-custom relative z-10 text-center space-y-12">
@@ -171,14 +310,10 @@ const Home = () => {
             className="text-8xl md:text-[12rem] font-black text-white leading-[0.85] uppercase italic tracking-tighter"
           >
             Vanguard<br />
-            <span className="text-emerald-500 drop-shadow-[0_0_50px_rgba(16,185,129,0.4)]">Archives.</span>
+            <span className="text-emerald-500">Archives.</span>
           </motion.h1>
 
-          <div className="absolute inset-0 z-[-1] flex items-center justify-center opacity-10 select-none overflow-hidden">
-            <div className="text-[20rem] font-black text-white mix-blend-overlay rotate-12 blur-2xl">
-              SYSTEM_4.0
-            </div>
-          </div>
+
 
 
           <motion.p
@@ -316,18 +451,46 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. X-RAY ANALYSIS (NEW CREATIVE SECTION) */}
-      <section className="py-40 bg-slate-950 overflow-hidden relative z-0 mt-[-1px]">
-        <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-12">
-            <div className="space-y-4">
-              <span className="text-emerald-500 text-[9px] font-black uppercase tracking-[0.5em]">Internal Breakdown</span>
-              <h2 className="text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
-                X-RAY <span className="text-emerald-500">Analysis.</span>
-              </h2>
+      {/* 5. X-RAY ANALYSIS (INTERNAL BREAKDOWN) */}
+      <section id="analysis" className="py-60 bg-slate-950 overflow-hidden relative z-0 mt-[-1px]">
+        {/* Cinematic Grid Background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, #10b981 1px, transparent 1px), linear-gradient(to bottom, #10b981 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+
+        <div className="container-custom grid grid-cols-1 lg:grid-cols-12 gap-20 items-center relative z-10">
+          <div className="lg:col-span-5 space-y-16">
+            <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4"
+              >
+                <div className="w-12 h-[1px] bg-emerald-500" />
+                <span className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.6em]">System Architecture</span>
+              </motion.div>
+              
+              <motion.h2 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-7xl md:text-8xl font-black text-white uppercase italic tracking-tighter leading-[0.85]"
+              >
+                X-RAY <br /> <span className="text-emerald-500 italic">Analysis.</span>
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-slate-400 text-lg md:text-xl font-medium italic leading-relaxed pl-8 border-l-2 border-emerald-500/20 max-w-md"
+              >
+                A deep-dive into the proprietary structural integrity and modular deployment vectors of the Vanguard core system.
+              </motion.p>
             </div>
 
-            <div className="space-y-10">
+            <div className="space-y-6">
               {[
                 { icon: HiOutlineIdentification, title: "Biometric Integration", desc: "Sensors that adapt to your body's thermal output in real-time." },
                 { icon: HiOutlineWrenchScrewdriver, title: "Modular Architecture", desc: "Connect varying utility pouches and extensions with seamless ease." },
@@ -335,59 +498,99 @@ const Home = () => {
               ].map((feat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex gap-8 group"
+                  transition={{ delay: 0.3 + (i * 0.1) }}
+                  className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.04] transition-all duration-700 group cursor-pointer"
                 >
-                  <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-premium">
-                    <feat.icon size={24} />
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="text-lg font-black text-white uppercase italic tracking-tighter">{feat.title}</h4>
-                    <p className="text-slate-400 text-sm italic font-medium leading-relaxed">{feat.desc}</p>
+                   <div className="flex gap-8 items-start">
+                    <div className="w-16 h-16 shrink-0 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-slate-950 shadow-2xl transition-premium">
+                      <feat.icon size={28} />
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="text-xl font-black text-white uppercase italic tracking-tighter group-hover:text-emerald-400 transition-colors uppercase">{feat.title}</h4>
+                      <p className="text-slate-500 text-sm italic font-medium leading-relaxed group-hover:text-slate-300 transition-colors">{feat.desc}</p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          <div className="relative">
+          <div className="lg:col-span-7 relative group">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
+              whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
               viewport={{ once: true }}
-              className="relative aspect-[3/4] overflow-hidden rounded-[4rem] border border-white/10"
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] overflow-hidden rounded-[4rem] border border-white/10 bg-slate-900 group-hover:border-emerald-500/20 transition-all duration-1000"
             >
-              <img src="https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover grayscale brightness-200 opacity-20" alt="Tech Diagram" />
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent" />
+              {/* Image with technical styling */}
+              <img 
+                src="https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&q=80&w=2000" 
+                className="w-full h-full object-cover grayscale brightness-150 contrast-125 opacity-20 group-hover:opacity-30 transition-opacity duration-1000" 
+                alt="Tech Diagram" 
+              />
+              
+              {/* Dynamic Scanning Line */}
+              <motion.div 
+                animate={{ top: ["0%", "100%", "0%"] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 right-0 h-[100px] bg-gradient-to-b from-transparent via-emerald-500/20 to-transparent pointer-events-none z-10 border-t border-emerald-500/40"
+              />
 
-              {/* Floating Labels */}
+              {/* Technical Overlay Grid Overlay */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_100%)] opacity-80" />
+
+              {/* Floating Labels / Markers */}
               {[
-                { top: "20%", left: "30%", label: "Thermal Lining" },
-                { top: "45%", left: "60%", label: "Tactical Pouch P01" },
-                { top: "75%", left: "25%", label: "Elastic Cinch System" }
+                { top: "25%", left: "35%", label: "Thermal Lining", ref: "TL-098" },
+                { top: "50%", left: "65%", label: "Tactical Pouch P01", ref: "TP-X1" },
+                { top: "80%", left: "30%", label: "Elastic Cinch System", ref: "ECS-V4" }
               ].map((pin, i) => (
                 <motion.div
                   key={i}
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: i * 1 }}
+                  animate={{ 
+                    y: [0, -15, 0],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, delay: i * 1.5, ease: "easeInOut" }}
                   style={{ top: pin.top, left: pin.left }}
-                  className="absolute z-20 flex flex-col items-center"
+                  className="absolute z-20 flex items-start gap-4"
                 >
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981]" />
-                  <div className="w-[1px] h-10 bg-emerald-500" />
-                  <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] font-black uppercase text-emerald-500 whitespace-nowrap">
-                    {pin.label}
+                   {/* pulsating dot */}
+                  <div className="relative group/pin">
+                    <div className="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_20px_#10b981] group-hover:scale-150 transition-transform duration-500" />
+                    <div className="absolute inset-[-8px] border border-emerald-500/30 rounded-full animate-ping" />
                   </div>
+
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + (i * 0.2) }}
+                    className="backdrop-blur-xl bg-slate-900/60 border border-white/10 p-5 rounded-3xl space-y-1 min-w-[160px] hover:border-emerald-500/50 hover:bg-slate-950/80 transition-all duration-500 translate-y-[-50%]"
+                  >
+                    <div className="text-[8px] font-black text-emerald-500/60 uppercase tracking-[0.3em] font-mono">{pin.ref}</div>
+                    <div className="text-xs font-black text-white uppercase tracking-wider">{pin.label}</div>
+                    <div className="pt-2 border-t border-white/5 flex items-center justify-between">
+                       <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">Status: Optimal</span>
+                       <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                    </div>
+                  </motion.div>
                 </motion.div>
               ))}
+
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none" />
             </motion.div>
-            <div className="absolute -inset-10 bg-emerald-500/5 blur-[100px] pointer-events-none" />
+            
+            {/* Visual Depth Accents */}
+            <div className="absolute -inset-20 bg-emerald-500/5 blur-[120px] pointer-events-none -z-10" />
+            <div className="absolute bottom-10 -right-10 w-40 h-40 border border-emerald-500/10 rounded-full animate-pulse-slow" />
           </div>
         </div>
       </section>
+
 
       {/* 6. FEATURED DROP */}
       <section className="py-40 bg-white">
@@ -441,23 +644,35 @@ const Home = () => {
               { img: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=1000", title: "MK-02", type: "Utility Vest" },
               { img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=1000", title: "MK-03", type: "Cargo System" }
             ].map((mod, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -20 }}
-                className="relative aspect-[4/5] rounded-[3rem] overflow-hidden group shadow-2xl shadow-slate-200"
-              >
-                <img src={mod.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={mod.title} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                <div className="absolute bottom-10 left-10 text-left space-y-1">
-                  <span className="text-emerald-400 font-black text-[9px] uppercase tracking-widest">{mod.type}</span>
-                  <h4 className="text-4xl font-black text-white italic tracking-tighter">{mod.title}</h4>
-                </div>
-                <Button variant="secondary" className="absolute bottom-10 right-10 w-12 h-12 rounded-full p-0 flex items-center justify-center shadow-lg border-none">
-                  <HiOutlineArrowUpRight size={20} />
-                </Button>
-              </motion.div>
+              <Link key={i} to="/shop" className="block outline-none focus:ring-2 focus:ring-emerald-500 rounded-[3rem]">
+                <motion.div
+                  whileHover={{ y: -20, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="relative aspect-[4/5] rounded-[3rem] overflow-hidden group shadow-2xl shadow-slate-200 cursor-pointer"
+                >
+                  <img src={mod.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={mod.title} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-10 left-10 text-left space-y-1">
+                    <span className="text-emerald-400 font-black text-[9px] uppercase tracking-widest">{mod.type}</span>
+                    <h4 className="text-4xl font-black text-white italic tracking-tighter">{mod.title}</h4>
+                  </div>
+                  <div className="absolute bottom-10 right-10 w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-xl group-hover:bg-emerald-500 group-hover:text-white transition-premium group-hover:rotate-45">
+                    <HiOutlineArrowUpRight size={22} className="text-slate-950 group-hover:text-white" />
+                  </div>
+                  
+                  {/* Subtle technical overlay on hover */}
+                  <div className="absolute inset-x-8 top-8 py-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="flex justify-between items-center text-[8px] font-black text-white/40 uppercase tracking-widest">
+                       <span>Ref_MN-2026</span>
+                       <span className="text-emerald-500">Active</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
+
         </div>
       </section>
 
@@ -518,7 +733,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 10. GLOBAL VANGUARD DEPLOYMENT (MAP) */}
+      {/* 10. GLOBAL VANGUARD DEPLOYMENT (INTERACTIVE MAP) */}
       <section className="py-40 bg-slate-950 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 blur-sm pointer-events-none">
           <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover" alt="Global BG" />
@@ -532,51 +747,71 @@ const Home = () => {
             <p className="text-slate-400 text-xl italic font-medium leading-relaxed">
               Our deployment infrastructure spans leading technical hubs globally. Priority shipping routed through secure Vanguard nodes in under 48 hours.
             </p>
-            <div className="grid grid-cols-2 gap-10">
-              {["Tokyo-01", "Berlin-IX", "Brooklyn-04", "Seoul-Core"].map((city) => (
-                <div key={city} className="flex items-center gap-4 text-white hover:text-emerald-500 transition-colors cursor-crosshair">
-                  <HiOutlineMapPin size={24} className="text-emerald-500" />
-                  <span className="text-xs font-black uppercase tracking-widest">{city}</span>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {["Tokyo-01", "Berlin-IX", "Brooklyn-04", "Seoul-Core"].map((city, idx) => (
+                <motion.div
+                  key={city}
+                  onClick={() => setActiveCity(city)}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className={`group relative flex items-center justify-between p-6 rounded-3xl border transition-all duration-500 cursor-pointer overflow-hidden ${activeCity === city
+                      ? "bg-white/10 border-emerald-500/50 shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+                      : "bg-white/[0.02] border-white/5 hover:border-white/20"
+                    }`}
+                >
+                  {/* Active Indicator (Left Border) */}
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: activeCity === city ? "60%" : "0%",
+                      opacity: activeCity === city ? 1 : 0
+                    }}
+                    className="absolute left-0 w-1 bg-emerald-500 rounded-r-full"
+                  />
+
+                  <div className="flex items-center gap-5 relative z-10">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-500 ${activeCity === city ? "bg-emerald-500 text-slate-950" : "bg-white/5 text-emerald-500 group-hover:bg-emerald-500/10"
+                      }`}>
+                      <HiOutlineMapPin size={22} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${activeCity === city ? "text-emerald-400" : "text-white/40 group-hover:text-white/60"
+                        }`}>Node Terminal</span>
+                      <span className={`text-sm font-black uppercase tracking-widest transition-colors ${activeCity === city ? "text-white" : "text-white/80 group-hover:text-white"
+                        }`}>{city}</span>
+                    </div>
+                  </div>
+
+                  {/* Status Pulse */}
+                  <div className="flex items-center gap-2">
+                    <div className={`w-1.5 h-1.5 rounded-full ${activeCity === city ? "bg-emerald-500 animate-pulse" : "bg-white/10"}`} />
+                  </div>
+
+                  {/* Glass Shimmer on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                </motion.div>
               ))}
             </div>
-            <Button variant="secondary" className="rounded-full px-12 mt-10 shadow-lg">Locate Terminal</Button>
+
           </div>
 
-          <div className="relative aspect-square flex items-center justify-center">
-            {/* Main Glow Rings */}
-            <div className="absolute inset-0 border-[2px] border-emerald-500/10 rounded-full animate-pulse-slow" />
-            <div className="absolute inset-10 border-[1px] border-white/5 rounded-full" />
-            <div className="absolute inset-20 border-[1px] border-white/5 rounded-full" />
-
-            <div className="relative flex items-center justify-center">
-              {/* Ping Animations */}
-              <div className="absolute w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_50px_#10b981] animate-ping" />
-              <div className="absolute w-1 h-1 rounded-full bg-emerald-500" />
-              <div className="absolute w-40 h-40 border border-emerald-500/20 rounded-full animate-ping" style={{ animationDuration: '4s' }} />
-
-              {/* The Vanguard Node Logo */}
-              <div className="relative z-10 group-hover:scale-110 transition-transform duration-1000">
-                <HiOutlineCubeTransparent size={180} className="text-emerald-500/10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <HiOutlineGlobeAlt size={100} className="text-white/20 animate-pulse-slow" />
-                </div>
-              </div>
-            </div>
+          <div className="flex justify-center lg:justify-end">
+            <TrueGlobe activeCity={activeCity} onResetSelection={() => setActiveCity(null)} />
           </div>
-
         </div>
       </section>
+
 
       {/* 11. STREET ARCHIVES (LIVE 3D EDITORIAL GALLERY) */}
       <section className="py-40 bg-white relative overflow-hidden">
         {/* Decorative Grid Lines */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-        
+
         <div className="container-custom space-y-24 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 border-b-2 border-slate-950 pb-12">
             <div className="space-y-4">
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -584,7 +819,7 @@ const Home = () => {
               >
                 Visual Intelligence
               </motion.span>
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -639,34 +874,67 @@ const Home = () => {
         </div>
       </section>
 
-     
 
-      {/* 13. RESTRICTED PROTOCOLS (FAQ) */}
-      <section className="py-40 bg-white">
-        <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <span className="text-emerald-600 text-[10px] font-black uppercase tracking-[0.5em]">Support System</span>
-              <h2 className="text-6xl font-black text-slate-950 uppercase italic tracking-tighter leading-none uppercase">Restricted Protocols.</h2>
+
+      {/* 13. RESTRICTED PROTOCOLS (SUPPORT SYSTEM / FAQ) */}
+      <section id="support" className="py-60 bg-white relative overflow-hidden">
+        {/* Subtle Background HUD elements */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+        <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-20 items-start">
+          <div className="lg:col-span-5 space-y-12">
+            <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="flex items-center gap-4"
+              >
+                <div className="w-10 h-[2px] bg-emerald-500" />
+                <span className="text-emerald-600 text-[10px] font-black uppercase tracking-[0.6em]">Support Infrastructure</span>
+              </motion.div>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-7xl md:text-8xl font-black text-slate-950 uppercase italic tracking-tighter leading-[0.9]"
+              >
+                Restricted <br /> <span className="text-emerald-500 underline decoration-slate-950/5 underline-offset-8">Protocols.</span>
+              </motion.h2>
             </div>
-            <p className="text-slate-500 text-xl italic font-medium leading-relaxed max-w-lg">
-              Authorized support for high-frequency gear maintenance and deployment queries.
-            </p>
-            <Button variant="primary" className="rounded-full px-12 bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 border-none transition-premium">Direct Terminal Access</Button>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-slate-500 text-xl md:text-2xl italic font-medium leading-relaxed max-w-lg border-l-2 border-slate-100 pl-8"
+            >
+              Authorized support nodes for high-frequency gear maintenance, encrypted deployment queries, and archival recalibration.
+            </motion.p>
+
+
           </div>
 
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-7"
+          >
             <Accordion
               items={[
-                { title: "Protocol 01: Shipping Logistics", content: "Global decentralized shipping nodes ensure delivery within 48-72 hours for all Archive members." },
-                { title: "Protocol 02: Returns & Recalibration", content: "Unworn tactical gear can be returned for recalibration within 30 solar cycles. Authentication tags must remain intact." },
-                { title: "Protocol 03: Security & Encryption", content: "All biological data and purchase metrics are encrypted using AES-256 standard and stored on private Vanguard servers." },
-                { title: "Protocol 04: Maintenance & Cleaning", content: "Laboratory-grade technical shells should be hand-washed with pH-neutral technical detergents only." }
+                { title: "Shipping Logistics", content: "Global decentralized shipping nodes ensure delivery within 48-72 hours for all Archive members. Each package is tracked via real-time satellite telemetry." },
+                { title: "Returns & Recalibration", content: "Unworn tactical gear can be returned for system recalibration within 30 solar cycles. Authentication tags and biometric seals must remain intact for processing." },
+                { title: "Security & Encryption", content: "All biological data and purchase metrics are encrypted using AES-256 standard and stored on private Vanguard cold-storage servers to prevent unauthorized node access." },
+                { title: "Maintenance & Cleaning", content: "Laboratory-grade technical shells should be hand-washed with pH-neutral technical detergents only. Avoid high-heat cycles to preserve the integrity of atmospheric membranes." }
               ]}
             />
-          </div>
+          </motion.div>
         </div>
       </section>
+
 
       {/* 15. VANGUARD VAULT (RELEASE ROADMAP) */}
       <section className="py-40 bg-white">
@@ -702,44 +970,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 16. SYSTEM ARCHITECTURE (VISUAL BLUEPRINT) */}
-      <section className="py-40 bg-slate-900 relative overflow-hidden">
-        <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-10">
-            <span className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.5em]">System Architecture</span>
-            <h2 className="text-6xl md:text-8xl font-black text-white uppercase italic tracking-tighter leading-none">Core Engineering.</h2>
-            <div className="space-y-6">
-              {[
-                "Advanced Thermal Regulation (ATR-4)",
-                "Integrated Utility Pouching (IUP)",
-                "Reinforced Modular Seams (RMS)",
-                "Atmospheric Resistance Grade-01"
-              ].map((spec, i) => (
-                <div key={i} className="flex items-center gap-6 group">
-                  <div className="w-10 h-[1px] bg-emerald-500 group-hover:w-20 transition-all" />
-                  <span className="text-slate-400 font-bold uppercase tracking-widest text-xs group-hover:text-white transition-colors">{spec}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="relative">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-              className="w-[600px] h-[600px] border border-white/5 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-              className="w-[400px] h-[400px] border border-emerald-500/10 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            />
-            <div className="relative z-10 p-10 bg-slate-950/80 backdrop-blur-3xl rounded-[4rem] border border-white/10 shadow-3xl">
-              <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&q=80&w=1000" className="w-full h-96 object-cover rounded-[3rem] opacity-40 grayscale" alt="Architecture" />
-              <div className="absolute inset-x-20 bottom-20 h-1 bg-emerald-500/20" />
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* 14. TRANSMISSION (NEWSLETTER) */}
       <section className="py-40 bg-slate-950 relative overflow-hidden">

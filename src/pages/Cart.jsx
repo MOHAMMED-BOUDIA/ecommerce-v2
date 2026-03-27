@@ -17,7 +17,7 @@ const Cart = () => {
   const { items } = useSelector((state) => state.cart || { items: [] });
   const dispatch = useDispatch();
 
-  const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const subtotal = items.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0);
   const shipping = subtotal > 500 ? 0 : 25;
   const total = subtotal + shipping;
 
@@ -68,7 +68,12 @@ const Cart = () => {
                   className="flex flex-col sm:flex-row gap-10 pb-12 border-b border-slate-100 group"
                 >
                   <div className="w-full sm:w-64 aspect-square bg-slate-50 rounded-[2.5rem] overflow-hidden p-10 border border-transparent group-hover:border-emerald-500/20 transition-premium flex-shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" />
+                    <img 
+                      src={item.image} 
+                      alt={item.title} 
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80"; }}
+                      className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" 
+                    />
                   </div>
                   
                   <div className="flex-1 flex flex-col justify-between py-4">
@@ -94,7 +99,7 @@ const Cart = () => {
                             onClick={() => dispatch(updateQuantity({ id: item.id, quantity: Math.max(1, item.quantity - 1) }))}
                             className="w-12 h-full flex items-center justify-center text-slate-400 hover:text-slate-950"
                           >
-                            <HiOutlinePlus size={16} className="rotate-45" /> 
+                            <HiOutlineMinus size={16} /> 
                           </button>
                           <span className="w-12 text-center text-lg font-black text-slate-900">{item.quantity}</span>
                           <button 

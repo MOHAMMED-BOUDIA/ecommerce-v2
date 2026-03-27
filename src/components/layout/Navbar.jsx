@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   HiOutlineShoppingBag,
@@ -14,18 +14,30 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { toggleCart } from "../../features/cart/cartSlice";
 import clsx from "clsx";
+import PremiumSearchOverlay from "../ui/PremiumSearchOverlay";
 
 const NAV_LINKS = [
-  { name: "Archive", path: "/shop" },
+  { name: "Shop All", path: "/shop" },
   { name: "New Arrivals", path: "/new-arrivals" },
-  { name: "Tactical Gears", path: "/categories/tactical" },
-  { name: "The Lab", path: "/about" },
+  { name: "Tactical Gears", path: "/tactical-gears" },
+  { name: "The Lab", path: "/the-lab" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?q=${encodeURIComponent(searchQuery)}`);
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   const { items } = useSelector((state) => state.cart || { items: [] });
   const dispatch = useDispatch();
@@ -95,9 +107,10 @@ const Navbar = () => {
                   <NavLink
                     to={link.path}
                     className={({ isActive }) => clsx(
-                      "text-[10px] font-black uppercase tracking-[0.3em] transition-premium flex items-center gap-2 relative group",
-                      isActive ? "text-emerald-400" : "text-white/70 hover:text-white"
-                    )}
+                        "text-[10px] font-black uppercase tracking-[0.3em] transition-premium flex items-center gap-2 relative group",
+                        isActive ? "text-emerald-400" : "text-white/70 hover:text-white"
+                      )
+                    }
                   >
                     {link.name}
                     <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-500 group-hover:w-full" />
@@ -118,8 +131,8 @@ const Navbar = () => {
                 <HiOutlineUser size={20} />
               </Link>
 
-              <button
-                onClick={() => dispatch(toggleCart())}
+              <Link
+                to="/cart"
                 className="relative w-11 h-11 rounded-full flex items-center justify-center bg-emerald-500 text-slate-950 hover:bg-white transition-premium shadow-lg shadow-emerald-500/20 group"
               >
                 <HiOutlineShoppingBag size={20} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
@@ -128,7 +141,7 @@ const Navbar = () => {
                     {cartCount}
                   </span>
                 )}
-              </button>
+              </Link>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -192,36 +205,10 @@ const Navbar = () => {
       </AnimatePresence>
 
       <AnimatePresence>
-        {searchOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[150] bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center px-6"
-          >
-            <button
-              onClick={() => setSearchOpen(false)}
-              className="absolute top-10 right-10 w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-emerald-500 hover:text-slate-950 transition-premium"
-            >
-              <HiOutlineXMark size={32} />
-            </button>
-
-            <div className="w-full max-w-4xl space-y-10">
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-emerald-500 text-center block">Search Protocol</span>
-              <div className="relative group">
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Query parameters..."
-                  className="w-full bg-transparent border-b-4 border-white/10 py-10 text-6xl md:text-8xl font-black text-white uppercase italic tracking-tighter placeholder:text-white/5 outline-none focus:border-emerald-500 transition-premium"
-                />
-                <button className="absolute right-0 top-1/2 -translate-y-1/2 text-white/20 hover:text-emerald-500 transition-premium">
-                  <HiOutlineArrowRight size={48} />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+        <PremiumSearchOverlay 
+          isOpen={searchOpen} 
+          onClose={() => setSearchOpen(false)} 
+        />
       </AnimatePresence>
     </>
   );
