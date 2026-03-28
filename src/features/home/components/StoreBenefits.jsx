@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { HiOutlineTruck, HiOutlineShieldCheck, HiOutlineReceiptRefun, HiOutlineClock } from 'react-icons/hi2';
+import { HiOutlineTruck, HiOutlineShieldCheck, HiOutlineReceiptRefund, HiOutlineClock } from 'react-icons/hi2';
 
 const benefits = [
   {
@@ -14,7 +14,7 @@ const benefits = [
     description: "Tier-1 financial security protocols for all transactional data."
   },
   {
-    icon: HiOutlineReceiptRefun,
+    icon: HiOutlineReceiptRefund,
     title: "30-DAY EXCHANGE",
     description: "Seamless rotation of inventory within our 30-day archive policy."
   },

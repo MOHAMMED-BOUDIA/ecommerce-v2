@@ -1,190 +1,130 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  HiOutlineEnvelope,
-  HiOutlinePhone,
-  HiOutlineMapPin,
+import { 
   HiOutlineArrowRight,
-  HiOutlineGlobeAlt,
   HiOutlineShieldCheck,
-  HiOutlineTruck,
+  HiOutlineGlobeAlt,
+  HiOutlineCreditCard,
+  HiOutlineCubeTransparent
 } from "react-icons/hi2";
-import {
-  FaInstagram,
-  FaTwitter,
-  FaDiscord,
-  FaGithub,
-  FaArrowRight,
-} from "react-icons/fa6";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa6";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = {
-    shop: [
-      { name: "Global Archive", path: "/shop" },
-      { name: "New Deployments", path: "/shop" },
-      { name: "Tactical Loadout", path: "/shop" },
-      { name: "Apparel Protocol", path: "/shop" },
-    ],
-    intel: [
-      { name: "Mission Log", path: "/" },
-      { name: "Recruitment", path: "/" },
-      { name: "Maintenance", path: "/" },
-      { name: "The Lab", path: "/" },
-    ],
-    deployment: [
-      { name: "Transit Policy", path: "/" },
-      { name: "Return Protocol", path: "/" },
-      { name: "Secure Gateway", path: "/" },
-      { name: "Terms of Engagement", path: "/" },
-    ],
-  };
-
-  const socialLinks = [
-    { Icon: FaInstagram, path: "#", label: "Instagram" },
-    { Icon: FaTwitter, path: "#", label: "Twitter" },
-    { Icon: FaDiscord, path: "#", label: "Discord" },
-    { Icon: FaGithub, path: "#", label: "Github" },
+  const footerLinks = [
+    {
+      title: "Vanguard Hub",
+      links: [
+        { label: "Tactical Gears", path: "/shop" },
+        { label: "New Arrivals", path: "/new-arrivals" },
+        { label: "The Lab", path: "/the-lab" },
+      ],
+    },
+    {
+      title: "Navigation",
+      links: [
+        { label: "Account Console", path: "/profile" },
+        { label: "Wishlist Vault", path: "/wishlist" },
+        { label: "Authentication", path: "/login" },
+      ],
+    },
+    {
+      title: "Protocols",
+      links: [
+        { label: "Privacy Crypt", path: "/privacy" },
+        { label: "Cookie Policy", path: "/cookies" },
+        { label: "Return Standard", path: "/returns" },
+      ],
+    },
   ];
 
   return (
-    <footer className="bg-[#050505] text-white pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
-      {/* Background Decorative Element */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-500/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-24">
-          {/* Brand & Mission */}
-          <div className="lg:col-span-4 space-y-8">
-            <Link to="/" className="flex items-center gap-4 group w-fit">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center text-slate-950 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-xl shadow-emerald-500/20">
-                <HiOutlineGlobeAlt size={32} />
+    <footer className="bg-black border-t border-white/5 pt-12 pb-6 relative overflow-hidden font-sans">
+      {/* Refined Ambience */}
+      <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-t from-emerald-500/[0.03] to-transparent pointer-events-none" />
+      
+      <div className="container-custom max-w-7xl relative z-10 px-4">
+        <div className="flex flex-col lg:flex-row justify-between gap-10 mb-10">
+          
+          {/* Brand and News Section */}
+          <div className="max-w-xs space-y-6">
+            <Link to="/" className="flex items-center gap-4 group w-fit" aria-label="Vanguard Home">
+              <div className="relative w-11 h-11">
+                <div className="w-11 h-11 rounded-xl bg-slate-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative z-10 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent" />
+                  <HiOutlineCubeTransparent size={26} strokeWidth={2} className="relative z-10" aria-hidden="true" />
+                </div>
+                <div className="absolute -inset-1 bg-emerald-500/20 blur-md rounded-xl group-hover:bg-emerald-500/40 transition-all duration-500" />
               </div>
-              <span className="text-3xl font-black uppercase italic tracking-tighter">
-                Vanguard<span className="text-emerald-500">.</span>
+              <span className="text-2xl font-black text-white uppercase italic tracking-[-0.05em] leading-none hidden sm:flex items-center min-w-[120px]">
+                VANGUARD<span className="text-emerald-500 ml-0.5 animate-pulse text-3xl">.</span>
               </span>
             </Link>
-            <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm italic">
-              Pioneering the intersection of high-performance technical gear and
-              urban aesthetic. Every deployment is a statement of intent.
+            
+            <p className="text-white/30 text-[11px] leading-relaxed uppercase tracking-widest pl-1">
+              High-performance gear engineered for the modern operative.
             </p>
-            <div className="flex items-center gap-3">
-              {socialLinks.map(({ Icon, path, label }, i) => (
-                <a
-                  key={i}
-                  href={path}
-                  aria-label={label}
-                  className="w-11 h-11 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-slate-400 hover:bg-emerald-500 hover:text-slate-950 hover:border-emerald-500 hover:-translate-y-1 transition-all duration-300"
-                >
-                  <Icon size={18} />
-                </a>
-              ))}
+
+            <div className="relative group max-w-[240px]">
+              <input 
+                type="email" 
+                placeholder="DEPLOY@VANGUARD.IO" 
+                className="w-full bg-white/[0.02] border-b border-white/10 py-2 pr-10 text-[10px] text-white placeholder:text-white/10 focus:border-emerald-500/50 transition-all outline-none uppercase font-black tracking-widest"
+              />
+              <button className="absolute right-0 top-1/2 -translate-y-1/2 text-white/20 hover:text-emerald-500 transition-colors">
+                <HiOutlineArrowRight size={14} />
+              </button>
             </div>
           </div>
 
-          {/* Navigation Matrix */}
-          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-12">
-            <div>
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-8 underline underline-offset-8 decoration-white/10">
-                Archive
-              </h4>
-              <ul className="space-y-4">
-                {footerLinks.shop.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.path}
-                      className="text-slate-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-[10px] font-bold uppercase tracking-widest"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-8 underline underline-offset-8 decoration-white/10">
-                Intel
-              </h4>
-              <ul className="space-y-4">
-                {footerLinks.intel.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.path}
-                      className="text-slate-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-[10px] font-bold uppercase tracking-widest"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-8 underline underline-offset-8 decoration-white/10">
-                Protocol
-              </h4>
-              <ul className="space-y-4">
-                {footerLinks.deployment.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.path}
-                      className="text-slate-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-300 text-[10px] font-bold uppercase tracking-widest"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Comms Link */}
-          <div className="lg:col-span-4 space-y-8">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-4">
-              Comms Link
-            </h4>
-            <div className="space-y-6">
-              <p className="text-slate-400 text-xs font-medium italic leading-relaxed">
-                Join the encrypted frequency for priority deployment updates and
-                exclusive archives.
-              </p>
-              <div className="relative group">
-                <input
-                  type="email"
-                  placeholder="ID@NETWORK.IO"
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-6 text-sm text-white placeholder-slate-600 focus:ring-1 focus:ring-emerald-500 outline-none transition-all font-black hover:bg-white/[0.05]"
-                />
-                <button className="absolute right-2 top-2 bottom-2 bg-emerald-500 text-slate-950 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all duration-300 flex items-center gap-2 group/btn">
-                  Sync
-                  <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+          {/* Optimized Links Matrix */}
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-6 lg:ml-12 pt-2">
+            {footerLinks.map((section) => (
+              <div key={section.title}>
+                <h3 className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-4">
+                  {section.title}
+                </h3>
+                <ul className="space-y-2.5">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      <Link 
+                        to={link.path} 
+                        className="text-[11px] text-white/40 hover:text-emerald-500 transition-colors uppercase tracking-widest font-medium"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* System Credentials */}
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-wrap justify-center items-center gap-8">
-            <div className="flex items-center gap-2 text-slate-500 text-[9px] font-black uppercase tracking-widest">
-              <HiOutlineShieldCheck size={14} className="text-emerald-500" />{" "}
-              AES-256 Encrypted
+        {/* Streamlined Bottom Bar */}
+        <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-6 opacity-30 grayscale">
+            <div className="flex items-center gap-2 text-[8px] font-bold text-white uppercase tracking-widest">
+              <HiOutlineShieldCheck size={12} /> Encrypted
             </div>
-            <div className="flex items-center gap-2 text-slate-500 text-[9px] font-black uppercase tracking-widest">
-              <HiOutlineTruck size={14} className="text-emerald-500" /> Global
-              Logistic Protocol
+            <div className="flex items-center gap-2 text-[8px] font-bold text-white uppercase tracking-widest">
+              <HiOutlineGlobeAlt size={12} /> Global
+            </div>
+            <div className="flex items-center gap-2 text-[8px] font-bold text-white uppercase tracking-widest">
+              <HiOutlineCreditCard size={12} /> DH Secure
             </div>
           </div>
 
-          <p className="text-slate-600 text-[9px] font-black uppercase tracking-[0.4em] order-3 md:order-2">
-            &copy; {currentYear} Vanguard Lab. Terminal v4.0.2
-          </p>
-
-          <div className="flex items-center gap-6 order-2 md:order-3">
-            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-500 cursor-help transition-colors">
-              HELP@VANGUARD.IO
-            </span>
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 text-white/10">
+              <a href="#" className="hover:text-emerald-500 transition-all"><FaFacebookF size={12} /></a>
+              <a href="#" className="hover:text-emerald-500 transition-all"><FaTwitter size={12} /></a>
+              <a href="#" className="hover:text-emerald-500 transition-all"><FaInstagram size={12} /></a>
+            </div>
+            <p className="text-[8px] text-white/10 uppercase tracking-[0.4em] font-black italic whitespace-nowrap">
+              &copy; {currentYear} Vanguard Research Group
+            </p>
           </div>
         </div>
       </div>

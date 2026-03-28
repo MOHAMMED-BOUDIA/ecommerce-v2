@@ -18,11 +18,16 @@ const NewArrivals = lazy(() => import('../pages/NewArrivals'));
 const TacticalGears = lazy(() => import('../pages/TacticalGears'));
 const TheLab = lazy(() => import('../pages/TheLab'));
 
-/**
- * Premium Router Configuration
- */
+// Optimized Loading Wrapper for better LCP
 const LoadingWrapper = ({ children }) => (
-  <Suspense fallback={<Loader fullScreen size="lg" text="Synchronizing Data..." />}>
+  <Suspense fallback={
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950">
+      <div className="w-12 h-12 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mb-4" />
+      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500/50 animate-pulse">
+        Initializing System...
+      </span>
+    </div>
+  }>
     {children}
   </Suspense>
 );

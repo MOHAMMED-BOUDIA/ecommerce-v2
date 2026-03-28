@@ -2,11 +2,13 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import ScrollToTop from "./ScrollToTop";
 import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <Toaster 
         position="bottom-right"
         toastOptions={{

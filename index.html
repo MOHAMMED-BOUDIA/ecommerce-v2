@@ -4,7 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>e-commerce-react</title>
+    <title>VANGUARD | Premium Tactical Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'" />
+    <style>
+      /* Critical CSS for LCP and Initial UI */
+      :root { --emerald-500: #10b981; --slate-950: #020617; }
+      #root { background: var(--slate-950); min-height: 100vh; color: white; }
+      body { margin: 0; padding: 0; background: var(--slate-950); font-family: 'Inter', system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+      .hero-skeleton { background: linear-gradient(90deg, #020617 25%, #0f172a 50%, #020617 75%); background-size: 200% 100%; animation: shimmer 2s infinite linear; }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    </style>
   </head>
   <body>
     <div id="root"></div>

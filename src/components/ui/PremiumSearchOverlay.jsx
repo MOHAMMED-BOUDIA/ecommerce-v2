@@ -4,21 +4,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   HiOutlineMagnifyingGlass,
   HiOutlineXMark,
-  HiOutlineArrowUpRight,
+  HiOutlineArrowLongRight,
   HiOutlineFire,
   HiOutlineClock,
   HiOutlineTag,
+  HiOutlineSparkles,
 } from "react-icons/hi2";
 import { products } from "../../data/products";
 import { categories } from "../../data/categories";
 import clsx from "clsx";
 
 const TRENDING_QUERIES = [
-  "Tactical Wear",
-  "Cyber Deck",
-  "Modular Vest",
-  "Exoskeleton",
-  "Neural Link",
+  "Noise Cancelling",
+  "MacBook Pro M3",
+  "Diamond Rings",
+  "Leather Briefcase",
+  "Silk Midi Dress",
 ];
 
 const PremiumSearchOverlay = ({ isOpen, onClose }) => {
@@ -33,7 +34,7 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
     if (isOpen) {
       const saved = localStorage.getItem("recent_searches");
       if (saved) setRecentSearches(JSON.parse(saved));
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus(), 150);
       setActiveIndex(-1);
     }
   }, [isOpen]);
@@ -45,7 +46,7 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           p.category.toLowerCase().includes(query.toLowerCase())
         )
-        .slice(0, 4);
+        .slice(0, 5);
       setResults(filtered);
       setActiveIndex(-1);
     } else {
@@ -56,15 +57,20 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
+      setActiveIndex((prev) => (prev < (query ? results.length : 4) - 1 ? prev + 1 : prev));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
-    } else if (e.key === "Enter" && activeIndex >= 0) {
+    } else if (e.key === "Enter") {
       e.preventDefault();
-      const selected = results[activeIndex];
-      navigate(`/product/${selected.slug}`);
-      onClose();
+      if (activeIndex >= 0) {
+        const list = query ? results : products.filter(p => p.isFeatured).slice(0, 4);
+        const selected = list[activeIndex];
+        navigate(`/product/${selected.slug}`);
+        onClose();
+      } else {
+        handleSearch(query);
+      }
     } else if (e.key === "Escape") {
       onClose();
     }
@@ -99,72 +105,98 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] bg-slate-950/95 backdrop-blur-2xl flex flex-col"
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-3xl flex flex-col"
         >
-          {/* Header */}
-          <div className="container-custom py-10 flex justify-between items-center bg-slate-950/50">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
-                <HiOutlineMagnifyingGlass size={20} />
+          {/* Top Navigation Bar */}
+          <div className="w-full border-b border-white/5 bg-black/40">
+            <div className="container-custom py-6 flex justify-between items-center">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">
+                    Search Intelligence
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-emerald-500/50">
-                Quantum Search v2.0
-              </span>
+              <button
+                onClick={onClose}
+                className="group flex items-center gap-3 text-white/40 hover:text-white transition-colors"
+                aria-label="Close search"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:block">Close ESC</span>
+                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-white/40 transition-colors">
+                  <HiOutlineXMark size={20} />
+                </div>
+              </button>
             </div>
-            <button
-              onClick={onClose}
-              className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-emerald-500 hover:text-slate-950 transition-premium group"
-            >
-              <HiOutlineXMark size={24} className="group-hover:rotate-90 transition-transform duration-500" />
-            </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none pb-20">
-            <div className="container-custom py-10">
-              {/* Search Input Area */}
-              <div className="relative mb-20 max-w-5xl mx-auto">
+          <div className="flex-1 overflow-y-auto scrollbar-none">
+            <div className="container-custom py-12 lg:py-20">
+              {/* Intelligent Search Input */}
+              <div className="relative mb-24 max-w-5xl mx-auto lg:mx-0">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     handleSearch(query);
                   }}
+                  className="relative group"
                 >
+                  <HiOutlineMagnifyingGlass 
+                    className={clsx(
+                      "absolute left-0 top-1/2 -translate-y-1/2 text-4xl lg:text-5xl transition-colors duration-500",
+                      query ? "text-emerald-500" : "text-white/10"
+                    )} 
+                  />
                   <input
                     ref={inputRef}
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="ENTER QUERY_ "
-                    className="w-full bg-transparent border-b-2 border-white/5 py-8 text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter placeholder:text-white/5 outline-none focus:border-emerald-500 transition-premium"
+                    placeholder="Search premium products..."
+                    className="w-full bg-transparent border-none pl-16 lg:pl-24 py-6 text-4xl lg:text-7xl font-light text-white placeholder:text-white/5 outline-none focus:ring-0 transition-all font-sans"
                   />
-                  <div className="absolute right-4 bottom-8 flex items-center gap-4 pointer-events-none opacity-20 group-focus-within:opacity-100 transition-opacity">
-                    <span className="text-[10px] font-mono text-white tracking-widest uppercase">press enter to execute</span>
+                  <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/10">
+                    <motion.div 
+                      className="h-[2px] bg-emerald-500" 
+                      initial={{ width: 0 }}
+                      animate={{ width: query ? "100%" : "0%" }}
+                      transition={{ duration: 0.5 }}
+                    />
                   </div>
                 </form>
+                <div className="mt-6 flex items-center gap-4 text-white/20">
+                  <span className="text-[10px] font-medium uppercase tracking-widest">
+                    {query ? `Press Enter to search all results for "${query}"` : "Start typing to see real-time suggestions"}
+                  </span>
+                </div>
               </div>
 
-              {/* Suggestions Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 max-w-7xl mx-auto">
-                {/* Left Column: Contextual Data */}
-                <div className="lg:col-span-4 space-y-12">
-                  {/* Recent Searches */}
+              {/* Exploration Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+                {/* Side Discovery Column */}
+                <div className="lg:col-span-4 space-y-16">
+                  {/* Recent Activity */}
                   {recentSearches.length > 0 && (
                     <section>
-                      <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-6 flex items-center gap-3">
-                         <HiOutlineClock size={14} /> Recent Protocols
-                      </h3>
-                      <div className="flex flex-col gap-2">
+                      <header className="flex items-center gap-3 mb-8">
+                        <HiOutlineClock className="text-emerald-500" size={18} />
+                        <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
+                          Recently Viewed
+                        </h3>
+                      </header>
+                      <div className="flex flex-col gap-3">
                         {recentSearches.map((item) => (
                           <div
                             key={item}
                             onClick={() => handleSearch(item)}
-                            className="group flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-emerald-500/10 cursor-pointer border border-transparent hover:border-emerald-500/20 transition-premium"
+                            className="group flex items-center justify-between py-3 px-4 rounded-xl hover:bg-white/[0.03] cursor-pointer transition-all border border-transparent hover:border-white/5"
                           >
-                            <span className="text-white/60 group-hover:text-emerald-400 font-bold uppercase transition-colors italic">{item}</span>
+                            <span className="text-sm text-white/50 group-hover:text-white transition-colors">{item}</span>
                             <button 
                               onClick={(e) => removeRecent(e, item)}
-                              className="text-white/20 hover:text-white p-1"
+                              className="text-white/10 hover:text-red-400 p-1 transition-colors"
                             >
                               <HiOutlineXMark size={14} />
                             </button>
@@ -174,17 +206,20 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
                     </section>
                   )}
 
-                  {/* Trending */}
+                  {/* Curated Trends */}
                   <section>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-6 flex items-center gap-3">
-                       <HiOutlineFire size={14} className="text-orange-500" /> Trending Flux
-                    </h3>
+                    <header className="flex items-center gap-3 mb-8">
+                      <HiOutlineFire className="text-orange-500" size={18} />
+                      <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
+                        Popular Keywords
+                      </h3>
+                    </header>
                     <div className="flex flex-wrap gap-2">
                       {TRENDING_QUERIES.map((item) => (
                         <button
                           key={item}
                           onClick={() => handleSearch(item)}
-                          className="px-5 py-2.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/60 hover:bg-white hover:text-slate-950 transition-premium"
+                          className="px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/5 text-[10px] font-bold uppercase tracking-widest text-white/40 hover:bg-emerald-500 hover:text-black hover:border-emerald-500 transition-all duration-300"
                         >
                           {item}
                         </button>
@@ -192,95 +227,118 @@ const PremiumSearchOverlay = ({ isOpen, onClose }) => {
                     </div>
                   </section>
 
-                  {/* Categories */}
+                  {/* Elite Collections */}
                   <section>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-6 flex items-center gap-3">
-                       <HiOutlineTag size={14} /> Node Categories
-                    </h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {categories.slice(0, 4).map((cat) => (
+                    <header className="flex items-center gap-3 mb-8">
+                      <HiOutlineTag className="text-emerald-500" size={18} />
+                      <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
+                        Shop by Category
+                      </h3>
+                    </header>
+                    <div className="grid grid-cols-1 gap-3">
+                      {categories.map((cat) => (
                         <Link
                           key={cat.id}
-                          to={`/shop?category=${cat.id}`}
+                          to={`/shop?category=${cat.slug}`}
                           onClick={onClose}
-                          className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl hover:bg-emerald-500 group transition-premium border border-transparent hover:border-emerald-500/40"
+                          className="group flex items-center justify-between p-5 bg-white/[0.03] rounded-2xl hover:bg-white/[0.06] transition-all border border-white/5"
                         >
-                          <span className="text-xs font-black uppercase tracking-widest text-white group-hover:text-slate-950">{cat.name}</span>
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold uppercase tracking-widest text-white">{cat.name}</span>
+                            <span className="text-[9px] text-white/30 uppercase mt-1 tracking-wider">{cat.description}</span>
+                          </div>
+                          <HiOutlineArrowLongRight className="text-white/10 group-hover:text-emerald-500 group-hover:translate-x-2 transition-all" size={20} />
                         </Link>
                       ))}
                     </div>
                   </section>
                 </div>
 
-                {/* Right Column: Live Results */}
+                {/* Primary Results Column */}
                 <div className="lg:col-span-8">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-6 px-4">
-                    {query ? `Detected Modules [${results.length}]` : "Featured Tech"}
-                  </h3>
+                  <header className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-3">
+                      {query ? <HiOutlineMagnifyingGlass className="text-emerald-500" /> : <HiOutlineSparkles className="text-emerald-500" />}
+                      <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
+                        {query ? `Search Results [${results.length}]` : "Curated Recommendations"}
+                      </h3>
+                    </div>
+                  </header>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-4">
                     {(query ? results : products.filter(p => p.isFeatured).slice(0, 4)).map((product, idx) => (
                       <Link
                         key={product.id}
                         to={`/product/${product.slug}`}
                         onClick={onClose}
-                        onMouseEnter={() => query && setActiveIndex(idx)}
+                        onMouseEnter={() => setActiveIndex(idx)}
                         className={clsx(
-                          "group relative flex items-center gap-6 p-4 rounded-3xl border transition-premium overflow-hidden",
-                          query && activeIndex === idx 
-                          ? "bg-white/10 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]" 
-                          : "bg-white/5 border-white/5"
+                          "group relative flex items-center gap-8 p-5 rounded-3xl border transition-all duration-500 overflow-hidden",
+                          activeIndex === idx 
+                          ? "bg-white/[0.06] border-white/10 translate-x-3" 
+                          : "bg-white/[0.02] border-white/5"
                         )}
                       >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] group-hover:bg-emerald-500/20 transition-premium" />
+                        {/* Hover Gradient Effect */}
+                        <div className={clsx(
+                          "absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/[0.02] to-emerald-500/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-700",
+                          activeIndex === idx && "opacity-100"
+                        )} />
                         
-                        <div className="w-24 h-24 rounded-2xl overflow-hidden bg-slate-900 border border-white/10 shrink-0 relative z-10">
+                        <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden bg-white/5 border border-white/10 shrink-0 relative z-10 transition-transform duration-700 group-hover:scale-95">
                           <img 
                             src={product.image} 
                             alt={product.name} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100" 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                           />
                         </div>
 
-                        <div className="relative z-10 flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/70 py-1 px-2 bg-emerald-500/10 rounded">
+                        <div className="relative z-10 flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500/80">
                               {product.category}
                             </span>
+                            {product.isNew && (
+                              <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                            )}
+                            {product.isNew && (
+                              <span className="text-[9px] font-bold uppercase tracking-widest text-white/40">New Arrival</span>
+                            )}
                           </div>
-                          <h4 className="text-white font-black uppercase italic tracking-tighter group-hover:text-emerald-400 transition-colors mb-2">
+                          
+                          <h4 className="text-lg lg:text-xl font-medium text-white group-hover:text-emerald-400 transition-colors line-clamp-1 mb-2">
                             {product.name}
                           </h4>
-                          <div className="flex items-center justify-between">
-                            <span className="text-lg font-black text-white/90 font-mono italic">
-                              ${product.price}
+                          
+                          <div className="flex items-center gap-4">
+                            <span className="text-xl font-bold text-white tracking-tight">
+                              {product.price.toLocaleString()} <span className="text-xs font-normal text-white/40 ml-1 uppercase">DH</span>
                             </span>
-                            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-emerald-500 group-hover:text-slate-950 transition-premium">
-                              <HiOutlineArrowUpRight size={16} />
+                            <div className="h-4 w-[1px] bg-white/10" />
+                            <div className="flex items-center gap-1 text-emerald-500/60">
+                              <span className="text-[10px] font-bold whitespace-nowrap uppercase tracking-widest group-hover:text-emerald-400">View Product</span>
+                              <HiOutlineArrowLongRight className="group-hover:translate-x-1 transition-transform" />
                             </div>
                           </div>
+                        </div>
+
+                        {/* Visual Index */}
+                        <div className="absolute top-6 right-8 text-[40px] font-black text-white/[0.02] italic hidden lg:block group-hover:text-emerald-500/5 transition-colors">
+                          0{idx + 1}
                         </div>
                       </Link>
                     ))}
 
                     {query && results.length === 0 && (
-                      <div className="col-span-full py-20 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-3xl">
-                        <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-6">
-                          <HiOutlineMagnifyingGlass size={40} />
+                      <div className="py-20 flex flex-col items-center text-center">
+                        <div className="w-20 h-20 rounded-full bg-white/[0.02] border border-white/5 flex items-center justify-center mb-6">
+                          <HiOutlineMagnifyingGlass className="text-white/10" size={32} />
                         </div>
-                        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-[10px]">Zero matches found in database</p>
+                        <h4 className="text-xl text-white font-medium mb-2">No matches found for \"\"${query}\"\"</h4>
+                        <p className="text-white/40 text-sm max-w-xs">Double check your spelling or try searching for a category like \"\"Electronics\"\".</p>
                       </div>
                     )}
                   </div>
-
-                  {query && results.length > 0 && (
-                    <button
-                      onClick={() => handleSearch(query)}
-                      className="w-full mt-8 p-6 bg-emerald-500 text-slate-950 font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-premium flex items-center justify-center gap-3"
-                    >
-                      View All Results <HiOutlineArrowUpRight size={20} />
-                    </button>
-                  )}
                 </div>
               </div>
             </div>

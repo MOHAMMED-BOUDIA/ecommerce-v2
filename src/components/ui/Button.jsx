@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom';
  * Premium Vanguard Button Component
  * Supports both standard <button> and react-router-dom <Link> tags.
  */
-const Button = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  className = '', 
+const Button = ({
+  children,
+  variant = 'primary',
+  size = 'md',
+  className = '',
   fullWidth = false,
   as: Component = 'button',
   to,
-  ...props 
+  ...props
 }) => {
   const variants = {
     primary: 'bg-emerald-500 text-slate-950 hover:bg-white shadow-xl shadow-emerald-500/20',
