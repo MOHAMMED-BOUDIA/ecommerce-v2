@@ -3,8 +3,15 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { HiOutlineUserPlus, HiOutlineIdentification, HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineArrowRight } from "react-icons/hi2";
 import Button from "../components/ui/Button";
+import { useSEO } from "../hooks/useSEO";
 
 const Register = () => {
+  useSEO({
+    title: 'Create Account - VANGUARD',
+    description: 'Register for a new VANGUARD account to access exclusive products, save your wishlist, and manage orders.',
+    keywords: 'register, sign up, create account, membership',
+    canonical: 'https://vanguard.store/register',
+  });
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center py-12 px-6 lg:px-8 pt-40 pb-20 overflow-hidden relative">
       {/* Background Decorative Element */}

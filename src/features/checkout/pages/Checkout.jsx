@@ -13,8 +13,15 @@ import {
 } from 'react-icons/hi2';
 import Button from '../../../components/ui/Button';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../../../hooks/useSEO';
 
 const Checkout = () => {
+  useSEO({
+    title: 'Secure Checkout - VANGUARD',
+    description: 'Complete your purchase with our secure checkout process. VANGUARD premium tactical gear delivery.',
+    keywords: 'checkout, payment, secure, purchase, order',
+    canonical: 'https://vanguard.store/checkout',
+  });
   const { items } = useSelector((state) => state.cart);
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);

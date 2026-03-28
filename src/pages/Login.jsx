@@ -4,8 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineCpuChip, HiOutlineArrowRight } from "react-icons/hi2";
 import { setUser } from "../features/auth/authSlice";
+import { useSEO } from "../hooks/useSEO";
 
 const Login = () => {
+  useSEO({
+    title: 'Login - VANGUARD Account',
+    description: 'Log in to your VANGUARD account to access your profile, orders, and wishlist.',
+    keywords: 'login, account, sign in, authentication',
+    canonical: 'https://vanguard.store/login',
+  });
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

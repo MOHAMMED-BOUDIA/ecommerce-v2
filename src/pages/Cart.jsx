@@ -12,8 +12,15 @@ import {
 import { removeItem, updateQuantity } from "../features/cart/cartSlice";
 import Button from "../components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSEO } from "../hooks/useSEO";
 
 const Cart = () => {
+  useSEO({
+    title: 'Shopping Cart - VANGUARD',
+    description: 'Review and manage your shopping cart at VANGUARD. Proceed to checkout to complete your purchase of premium tactical gear.',
+    keywords: 'shopping cart, checkout, purchase, tactical gear',
+    canonical: 'https://vanguard.store/cart',
+  });
   const { items } = useSelector((state) => state.cart || { items: [] });
   const dispatch = useDispatch();
 

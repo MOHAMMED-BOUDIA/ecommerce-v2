@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /private
+Disallow: /temp
+
+# Allow slower crawling limit for better performance
+Crawl-delay: 1
+
+# Specify sitemap
+Sitemap: https://vanguard.store/sitemap.xml

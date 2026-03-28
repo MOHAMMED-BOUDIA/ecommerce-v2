@@ -23,8 +23,15 @@ import {
 import Button from "../components/ui/Button";
 import clsx from "clsx";
 import { logout } from "../features/auth/authSlice";
+import { useSEO } from "../hooks/useSEO";
 
 const Profile = () => {
+  useSEO({
+    title: 'My Profile - VANGUARD Account',
+    description: 'Manage your VANGUARD account profile, view order history, and manage your account settings.',
+    keywords: 'profile, account, settings, orders, user account',
+    canonical: 'https://vanguard.store/profile',
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((state) => state.auth);

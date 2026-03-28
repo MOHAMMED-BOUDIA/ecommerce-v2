@@ -3,8 +3,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { HiOutlineArrowSmallLeft, HiOutlineShieldExclamation, HiOutlineCommandLine } from 'react-icons/hi2';
 import Button from '../components/ui/Button';
+import { useSEO } from '../hooks/useSEO';
 
 const NotFound = () => {
+  useSEO({
+    title: '404 - Page Not Found - VANGUARD',
+    description: 'The page you are looking for does not exist. Return to VANGUARD homepage.',
+    keywords: '404, not found, error page',
+    canonical: 'https://vanguard.store/404',
+    status: 404,
+  });
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 relative overflow-hidden italic text-slate-950">
       {/* Background Grid Pattern */}

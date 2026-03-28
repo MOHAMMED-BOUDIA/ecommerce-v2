@@ -16,12 +16,22 @@ import { addItem } from "../features/cart/cartSlice";
 import { addToWishlist } from "../features/wishlist/wishlistSlice";
 import Button from "../components/ui/Button";
 import { toast } from "react-hot-toast";
+import { useSEO } from "../hooks/useSEO";
 
 const ProductDetail = () => {
-  const { slug } = useParams(); // Using slug (which is the ID in this API)
+  const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+
+  useSEO({
+    title: product ? `${product.title} - VANGUARD` : 'Product Details - VANGUARD',
+    description: product ? (product.description || `${product.title} - Premium tactical gear at VANGUARD`) : 'View product details and specifications',
+    keywords: product ? `${product.title}, tactical, equipment, ${product.category}` : 'product, details, tactical',
+    ogTitle: product ? `${product.title} - VANGUARD` : 'VANGUARD Product',
+    ogDescription: product ? (product.description || product.title) : 'Premium tactical product',
+    canonical: `https://vanguard.store/product/${slug}`,
+  });
 
   useEffect(() => {
     setLoading(true);

@@ -17,6 +17,8 @@ const NotFound = lazy(() => import('../pages/NotFound'));
 const NewArrivals = lazy(() => import('../pages/NewArrivals'));
 const TacticalGears = lazy(() => import('../pages/TacticalGears'));
 const TheLab = lazy(() => import('../pages/TheLab'));
+const Checkout = lazy(() => import('../features/checkout/pages/Checkout'));
+const OrderSuccess = lazy(() => import('../features/checkout/pages/OrderSuccess'));
 
 // Optimized Loading Wrapper for better LCP
 const LoadingWrapper = ({ children }) => (
@@ -41,50 +43,72 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <LoadingWrapper><Home /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'shop',
         element: <LoadingWrapper><Shop /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'product/:slug',
         element: <LoadingWrapper><ProductDetail /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'product/:id',
+        element: <LoadingWrapper><ProductDetail /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'cart',
         element: <LoadingWrapper><Cart /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'wishlist',
         element: <LoadingWrapper><Wishlist /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'login',
         element: <LoadingWrapper><Login /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'register',
         element: <LoadingWrapper><Register /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'profile',
         element: <LoadingWrapper><Profile /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
-        path: '404',
-        element: <LoadingWrapper><NotFound /></LoadingWrapper>,
+        path: 'checkout',
+        element: <LoadingWrapper><Checkout /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'order-success',
+        element: <LoadingWrapper><OrderSuccess /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'new-arrivals',
         element: <LoadingWrapper><NewArrivals /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'tactical-gears',
         element: <LoadingWrapper><TacticalGears /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'the-lab',
         element: <LoadingWrapper><TheLab /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: 'categories/tactical',
@@ -95,8 +119,12 @@ export const router = createBrowserRouter([
         element: <Navigate to="/the-lab" replace />,
       },
       {
+        path: '404',
+        element: <LoadingWrapper><NotFound /></LoadingWrapper>,
+      },
+      {
         path: '*',
-        element: <Navigate to="/404" replace />,
+        element: <LoadingWrapper><NotFound /></LoadingWrapper>,
       },
     ],
   },

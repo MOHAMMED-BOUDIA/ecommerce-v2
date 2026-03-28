@@ -12,8 +12,15 @@ import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import { addItem } from '../features/cart/cartSlice';
 import { removeFromWishlist } from '../features/wishlist/wishlistSlice';
+import { useSEO } from '../hooks/useSEO';
 
 const Wishlist = () => {
+  useSEO({
+    title: 'My Wishlist - VANGUARD',
+    description: 'View your saved wishlist of premium tactical gear and equipment from VANGUARD.',
+    keywords: 'wishlist, saved items, favorites, tactical gear',
+    canonical: 'https://vanguard.store/wishlist',
+  });
   const dispatch = useDispatch();
   const { items: wishlistItems } = useSelector((state) => state.wishlist);
 

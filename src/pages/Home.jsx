@@ -19,13 +19,13 @@ import {
   HiOutlineLockClosed,
   HiOutlineArrowUpRight,
   HiOutlineMapPin,
-  HiOutlineCamera,
   HiOutlineQuestionMarkCircle
 } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import Globe from "react-globe.gl";
 import Button from "../components/ui/Button";
 import Accordion from "../components/ui/Accordion";
+import { useSEO } from "../hooks/useSEO";
 import HeroSection from "../features/home/components/HeroSection";
 import BrandManifesto from "../features/home/components/BrandManifesto";
 import FeaturedCategories from "../features/home/components/FeaturedCategories";
@@ -102,11 +102,6 @@ const ArchiveItem = ({ item, colIdx, i }) => {
             </p>
           </div>
         </div>
-
-        {/* Corner Icon */}
-        <div className="absolute top-8 right-8 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center scale-75 group-hover:scale-100">
-          <HiOutlineCamera size={24} className="text-white" />
-        </div>
       </motion.div>
     </motion.div>
   );
@@ -135,6 +130,15 @@ const ColumnSection = ({ column, colIdx }) => {
 };
 
 const Home = () => {
+  useSEO({
+    title: 'VANGUARD | Premium Tactical Archive - Home',
+    description: 'Explore VANGUARD premium tactical gear, high-performance equipment, and innovative products. New arrivals, best sellers, and exclusive tactical solutions for professionals.',
+    keywords: 'tactical gear, premium equipment, new arrivals, best sellers, tactical solutions',
+    ogTitle: 'VANGUARD - Premium Tactical Archive',
+    ogDescription: 'Discover premium tactical gear and innovative equipment for professionals.',
+    canonical: 'https://vanguard.store/',
+  });
+
   const navigate = useNavigate();
   const globeRef = useRef(null);
   const globeTimersRef = useRef({ focus: null, reset: null });
@@ -192,6 +196,13 @@ const Home = () => {
   ];
 
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth';
+    return () => {
+      document.documentElement.style.scrollBehavior = 'auto';
+    };
+  }, []);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -371,7 +382,7 @@ const Home = () => {
             <Button as={Link} to="/shop" variant="primary" className="rounded-full px-12 h-20 shadow-emerald-500/20 overflow-hidden group">
               <span className="relative z-10 flex items-center gap-3">Access Archive <HiOutlineArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></span>
             </Button>
-            <Button as={Link} to="/about" variant="outline" className="rounded-full px-12 h-20 border-white/20 text-white hover:bg-emerald-500 hover:text-slate-950 hover:border-emerald-500 transition-premium">
+            <Button as={Link} to="/about" variant="outline" className="rounded-full px-12 h-20 border-white/20 text-white hover:bg-emerald-500 hover:text-slate-950 hover:border-emerald-500 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
               Intel Report
             </Button>
 
@@ -410,6 +421,15 @@ const Home = () => {
       {/* 3. CORE PILLARS */}
       <section className="py-40 bg-white">
         <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="mb-20"
+          >
+            <h2 className="text-5xl md:text-6xl font-black text-slate-950 uppercase italic tracking-tighter">Core Pillars</h2>
+          </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
             {[
               { icon: HiOutlineCpuChip, title: "Precision Crafted", desc: "Every module is engineered with sub-millimeter accuracy for peak performance." },    
@@ -418,15 +438,18 @@ const Home = () => {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: i * 0.12, duration: 0.6 }}
                 className="space-y-8 group"
               >
-                <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-900 group-hover:bg-emerald-500 group-hover:text-white transition-premium">
+                <motion.div 
+                  className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-900 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500"
+                  whileHover={{ scale: 1.08 }}
+                >
                   <item.icon size={32} />
-                </div>
+                </motion.div>
                 <div className="space-y-4">
                   <h3 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter">{item.title}</h3>
                   <p className="text-slate-500 text-sm leading-relaxed font-medium italic">{item.desc}</p>
@@ -441,9 +464,10 @@ const Home = () => {
       <section className="py-32 bg-slate-50 relative z-10">
         <div className="container-custom grid grid-cols-1 md:grid-cols-4 gap-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
             className="md:col-span-2 relative overflow-hidden rounded-[3rem] group"
           >
             <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Outerwear" />
@@ -456,10 +480,10 @@ const Home = () => {
 
           <div className="md:col-span-2 grid grid-cols-1 gap-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.92 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               className="aspect-square md:aspect-auto md:h-[380px] relative overflow-hidden rounded-[3rem] group"
             >
               <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Footwear" />
@@ -470,10 +494,10 @@ const Home = () => {
               </div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.92 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               className="aspect-square md:aspect-auto md:h-[380px] relative overflow-hidden rounded-[3rem] group"
             >
               <img src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&q=80&w=2000" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Accessories" />      
@@ -495,7 +519,13 @@ const Home = () => {
         <div className="container-custom relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24 items-start">
             <div className="lg:col-span-5 space-y-10 lg:sticky lg:top-32">
-              <div className="space-y-5 max-w-xl">
+              <motion.div 
+                className="space-y-5 max-w-xl"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-[9px] font-black uppercase tracking-[0.45em] text-emerald-400">
                   Internal Breakdown
                 </span>
@@ -505,9 +535,15 @@ const Home = () => {
                 <p className="max-w-lg text-base md:text-lg leading-relaxed text-slate-400 italic">
                   A closer read on the architecture, materials, and modular logic behind the collection. Built for clarity, endurance, and precision under pressure.
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <motion.div 
+                className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              >
                 {[
                   { label: "Signal", value: "99.8%" },
                   { label: "Layers", value: "03" },
@@ -518,7 +554,7 @@ const Home = () => {
                     <div className="mt-3 text-2xl font-black uppercase italic tracking-tighter text-white">{metric.value}</div>
                   </div>
                 ))}
-              </div>
+              </motion.div>
 
               <div className="space-y-4">
                 {[
@@ -664,7 +700,7 @@ const Home = () => {
               alt="Featured Gear"
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-premium" />
+            <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-all duration-500" />
           </motion.div>
 
           <motion.div
@@ -896,20 +932,38 @@ const Home = () => {
 
         <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
           <div className="space-y-12">
-            <div className="space-y-4 max-w-xl">
+            <motion.div 
+              className="space-y-4 max-w-xl"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
               <span className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.45em] text-emerald-500">
                 Logistics Network
               </span>
               <h2 className="text-6xl md:text-7xl font-black text-white uppercase italic tracking-tighter leading-[0.92]">
                 Global Network.
               </h2>
-            </div>
+            </motion.div>
 
-            <p className="max-w-xl text-lg md:text-xl italic font-medium leading-relaxed text-slate-400">
+            <motion.p 
+              className="max-w-xl text-lg md:text-xl italic font-medium leading-relaxed text-slate-400"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
               Our deployment infrastructure spans leading technical hubs globally. Tap a city to rotate the earth toward that node, zoom into the route, and then return to the default global orbit.
-            </p>
+            </motion.p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.24, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
               {globeCities.map((city) => {
                 const isActive = activeGlobeCity?.code === city.code;
 
@@ -939,9 +993,15 @@ const Home = () => {
                   </button>
                 );
               })}
-            </div>
+            </motion.div>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2 text-[9px] font-black uppercase tracking-[0.45em] text-slate-500">
+            <motion.div 
+              className="flex flex-wrap items-center gap-4 pt-2 text-[9px] font-black uppercase tracking-[0.45em] text-slate-500"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.36, duration: 0.6 }}
+            >
               <span className="inline-flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
                 Live route control
@@ -950,7 +1010,7 @@ const Home = () => {
                 <span className="h-2 w-2 rounded-full bg-white/30" />
                 Auto orbit resumes after focus
               </span>
-            </div>
+            </motion.div>
           </div>
 
           <div className="relative min-h-[680px] overflow-hidden rounded-[3rem] border border-white/10 bg-slate-900 shadow-[0_30px_100px_rgba(0,0,0,0.45)]">
@@ -970,11 +1030,17 @@ const Home = () => {
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-              <div className="relative aspect-square w-[min(100%,820px)]">
+              <div className="relative w-full max-w-[440px] aspect-square flex items-center justify-center">
                 <Globe
                   ref={globeRef}
-                  className="absolute inset-0 z-10 !w-full !h-full !max-w-none scale-[1.12] md:scale-[1.16]"
-                  style={{ width: '100%', height: '100%', display: 'block', transformOrigin: 'center center' }}
+                  className="w-full h-full z-10"
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    display: 'block',
+                    transformOrigin: 'center center',
+                    margin: '0 auto'
+                  }}
                   backgroundColor="rgba(0,0,0,0)"
                   globeImageUrl="https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
                   bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
@@ -1044,7 +1110,8 @@ const Home = () => {
               <motion.span
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6 }}
                 className="text-emerald-600 text-[10px] font-black uppercase tracking-[0.6em]"
               >
                 Visual Intelligence
@@ -1052,7 +1119,8 @@ const Home = () => {
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: 0.12, duration: 0.6 }}
                 className="text-7xl md:text-8xl font-black text-slate-950 uppercase italic tracking-tighter leading-none"
               >
                 Street <span className="text-emerald-500">Archives.</span>      
@@ -1168,7 +1236,7 @@ const Home = () => {
                 <motion.div
                   key={i}
                   whileHover={{ scale: 1.02 }}
-                  className="p-10 rounded-[2.5rem] bg-slate-50 border border-slate-100 space-y-4 group transition-premium hover:border-emerald-500/20"
+                  className="p-10 rounded-[2.5rem] bg-slate-50 border border-slate-100 space-y-4 group transition-all duration-500 hover:border-emerald-500/20"
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{item.phase}</span>
@@ -1187,7 +1255,13 @@ const Home = () => {
       {/* 14. TRANSMISSION (NEWSLETTER) */}
       <section className="py-40 bg-slate-950 relative overflow-hidden">
         <div className="container-custom text-center space-y-16 relative z-10 py-20">
-          <div className="space-y-6">
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
             <span className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.5em]">Network Access</span>
             <h2 className="text-6xl md:text-9xl font-black text-white uppercase italic tracking-tighter leading-none">
               Join the <br /><span className="text-emerald-500">Transmission.</span>
@@ -1195,9 +1269,15 @@ const Home = () => {
             <p className="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto italic">
               Get priority access to restricted drops, technical documentation, and experimental prototypes.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="max-w-xl mx-auto flex flex-col md:flex-row gap-4">    
+          <motion.div 
+            className="max-w-xl mx-auto flex flex-col md:flex-row gap-4"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >    
             <input
               type="email"
               placeholder="AUTHENTICATE EMAIL..."
@@ -1206,7 +1286,7 @@ const Home = () => {
             <Button variant="primary" className="rounded-full px-12">
               Initiate
             </Button>
-          </div>
+          </motion.div>
         </div>
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
       </section>
