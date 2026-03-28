@@ -1,4 +1,4 @@
-export const categories = [
+const categories = [
   {
     "id": 1,
     "name": "Electronics",
@@ -15,16 +15,18 @@ export const categories = [
   },
   {
     "id": 3,
-    "name": "Men\"\"s Fashion",
+    "name": "Men's Fashion",
     "slug": "mens-fashion",
     "image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80",
     "description": "Tailored apparel and luxury essentials for men."
   },
   {
     "id": 4,
-    "name": "Women\"\"s Fashion",
+    "name": "Women's Fashion",
     "slug": "womens-fashion",
     "image": "https://images.unsplash.com/photo-1515347619152-14023c10f8fa?auto=format&fit=crop&w=800&q=80",
     "description": "Haut couture and elegant styles for women."
   }
 ];
+
+export { categories };

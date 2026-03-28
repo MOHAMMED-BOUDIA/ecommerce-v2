@@ -7,14 +7,14 @@ const products = [
     {
         id: 1,
         name: "ARCHIVE SHELL",
-        price: "$450.00",
+        price: "450.00 DH",
         category: "DEPLOYMENT 01",
         image: "https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=2070&auto=format&fit=crop"
     },
     {
         id: 2,
         name: "MODULAR KINETIC",
-        price: "$320.00",
+        price: "320.00 DH",
         category: "DEPLOYMENT 02",
         image: "https://images.unsplash.com/photo-1514332130164-2795c697089b?q=80&w=2070&auto=format&fit=crop"
     }

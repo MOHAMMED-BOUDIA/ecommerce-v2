@@ -96,13 +96,13 @@ const Wishlist = () => {
                         {product.title}
                       </h3>
                       <p className="text-2xl font-black text-emerald-500 italic tracking-tighter mt-4">
-                        ${product.price}
+                        {product.price} DH
                       </p>
                     </div>
 
                     <Button
                       onClick={() => handleMoveToCart(product)}
-                      className="w-full h-16 rounded-2xl bg-white text-slate-950 border-2 border-slate-100 hover:bg-slate-950 hover:text-white hover:border-slate-950 shadow-sm group/btn"
+                      className="w-full h-16 rounded-2xl bg-emerald-500 text-slate-950 border-none hover:bg-emerald-400 shadow-xl shadow-emerald-500/20 group/btn transition-all duration-300"
                     >
                       MOVE TO BAG <HiOutlineArrowRight className="ml-3 group-hover/btn:translate-x-2 transition-premium" />
                     </Button>

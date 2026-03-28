@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
+import AdminLayout from '../components/layout/AdminLayout';
+import ProtectedAdminRoute from '../components/ProtectedAdminRoute';
 import Loader from '../components/ui/Loader';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 
@@ -22,6 +24,14 @@ const OrderSuccess = lazy(() => import('../features/checkout/pages/OrderSuccess'
 const Privacy = lazy(() => import('../pages/Privacy'));
 const Cookies = lazy(() => import('../pages/Cookies'));
 const Returns = lazy(() => import('../pages/Returns'));
+
+// Admin pages
+const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'));
+const AdminProducts = lazy(() => import('../pages/admin/Products'));
+const AdminCategories = lazy(() => import('../pages/admin/Categories'));
+const AdminOrders = lazy(() => import('../pages/admin/Orders'));
+const AdminUsers = lazy(() => import('../pages/admin/Users'));
+const AdminSettings = lazy(() => import('../pages/admin/Settings'));
 
 // Optimized Loading Wrapper for better LCP
 const LoadingWrapper = ({ children }) => (
@@ -143,6 +153,51 @@ export const router = createBrowserRouter([
       {
         path: '*',
         element: <LoadingWrapper><NotFound /></LoadingWrapper>,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout />
+      </ProtectedAdminRoute>
+    ),
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/admin/dashboard" replace />,
+      },
+      {
+        path: 'dashboard',
+        element: <LoadingWrapper><AdminDashboard /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'products',
+        element: <LoadingWrapper><AdminProducts /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'categories',
+        element: <LoadingWrapper><AdminCategories /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'orders',
+        element: <LoadingWrapper><AdminOrders /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'users',
+        element: <LoadingWrapper><AdminUsers /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'settings',
+        element: <LoadingWrapper><AdminSettings /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
       },
     ],
   },

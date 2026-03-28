@@ -42,10 +42,7 @@ CollectionImage.displayName = "CollectionImage";
 
 const formatCategoryLabel = (category) => {
   if (category === "all") return "All Items";
-  if (category === "jewelery") return "Jewelry";
-  if (category === "men's clothing") return "Men's Clothing";
-  if (category === "women's clothing") return "Women's Clothing";
-  return category ? category.charAt(0).toUpperCase() + category.slice(1) : "Archive";
+  return category ? category : "Archive";
 };
 
 const CollectionTemplate = ({
@@ -62,7 +59,10 @@ const CollectionTemplate = ({
   const dispatch = useDispatch();
   const itemsPerPage = 8;
 
-  const categories = useMemo(() => ["all", "electronics", "jewelery", "men's clothing", "women's clothing"], []);
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(new Set(products.map(p => p.category).filter(Boolean)));
+    return ["all", ...uniqueCategories.sort()];
+  }, [products]);
 
   const displayedProducts = useMemo(() => {
     let filteredProducts =

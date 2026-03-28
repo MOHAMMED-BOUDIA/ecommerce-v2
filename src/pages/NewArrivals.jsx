@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchProducts } from "../services/productService";
+import { productDataService } from "../services/productDataService";
 import CollectionTemplate from "../components/ui/CollectionTemplate";
 import { useSEO } from "../hooks/useSEO";
 
@@ -13,13 +13,14 @@ const NewArrivals = () => {
     canonical: 'https://vanguard.store/new-arrivals',
   });
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchProducts().then(data => {
-      setProducts(data.filter(p => p.newArrival));
-      setLoading(false);
-    });
+    setLoading(true);
+    const allProducts = productDataService.getAll();
+    const newProducts = allProducts.filter(p => p.isNew).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    setProducts(newProducts);
+    setLoading(false);
   }, []);
 
   const config = {

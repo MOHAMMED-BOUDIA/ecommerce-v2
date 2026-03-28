@@ -7,21 +7,21 @@ const bestSellers = [
   {
     id: 1,
     name: "LINEAR GLOVES",
-    price: "$110.00",
+    price: "DH110.00",
     image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop",
     metric: "01"
   },
   {
     id: 2,
     name: "AXIS PACK",
-    price: "$290.00",
+    price: "DH290.00",
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=2070&auto=format&fit=crop",
     metric: "02"
   },
   {
     id: 3,
     name: "ZENITH CORE",
-    price: "$180.00",
+    price: "DH180.00",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070&auto=format&fit=crop",
     metric: "03"
   }

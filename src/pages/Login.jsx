@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineCpuChip, HiOutlineArrowRight } from "react-icons/hi2";
 import { setUser } from "../features/auth/authSlice";
 import { useSEO } from "../hooks/useSEO";
+import { mockAdminUser, mockRegularUser } from "../data/mockAdmin";
 
 const Login = () => {
   useSEO({
@@ -26,22 +27,52 @@ const Login = () => {
     setError(null);
 
     try {
-      // Simulation of auth protocol
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Mock successful authentication
-      const mockUser = {
-        user: {
-          id: "UK-9902-8X",
-          name: "Alex Kira",
-          email: formData.email,
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop"
-        },
-        token: "vanguard_secure_token_abc123"
-      };
+      let user = null;
+      
+      // Check admin credentials
+      if (formData.email === mockAdminUser.email && formData.password === mockAdminUser.password) {
+        user = {
+          user: mockAdminUser,
+          token: "vanguard_admin_token_xyz789"
+        };
+      }
+      // Check regular user credentials
+      else if (formData.email === mockRegularUser.email && formData.password === mockRegularUser.password) {
+        user = {
+          user: mockRegularUser,
+          token: "vanguard_user_token_abc123"
+        };
+      }
+      // Generic user login
+      else if (formData.email && formData.password) {
+        user = {
+          user: {
+            id: "UK-9902-8X",
+            name: "Alex Kira",
+            email: formData.email,
+            role: "user",
+            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&h=400&auto=format&fit=crop"
+          },
+          token: "vanguard_secure_token_abc123"
+        };
+      } else {
+        setError("Invalid Email or Password");
+        setIsLoading(false);
+        return;
+      }
 
-      dispatch(setUser(mockUser));
-      navigate("/profile");
+      dispatch(setUser(user));
+      
+      // Redirect based on role - add small delay to ensure Redux state updates
+      setTimeout(() => {
+        if (user.user.role === 'admin') {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/profile");
+        }
+      }, 100);
     } catch (err) {
       setError("Access Denied: System Rejection");
     } finally {
@@ -127,6 +158,15 @@ const Login = () => {
               </button>
             </div>
           </form>
+
+          {/* Demo Credentials Info */}
+          <div className="mt-8 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
+            <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-2">DEMO CREDENTIALS:</p>
+            <div className="space-y-1 text-[8px] text-white/60">
+              <p>Admin: admin@vanguard.io / admin123</p>
+              <p>User: user@vanguard.io / user123</p>
+            </div>
+          </div>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5 pt-8">
             <Link to="/register" className="text-[10px] font-bold text-white/30 uppercase tracking-widest hover:text-emerald-500 transition-colors">

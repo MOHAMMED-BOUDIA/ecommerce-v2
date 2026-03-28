@@ -60,10 +60,10 @@ const Navbar = memo(() => {
       {/* Top Banner - Fixed Height to prevent CLS */}
       <div className="fixed top-0 left-0 right-0 h-8 md:h-10 bg-slate-950 text-white flex items-center overflow-hidden border-b border-white/5 z-[60]" aria-hidden="true">
         <div className="flex whitespace-nowrap gap-12 md:gap-20 text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] opacity-80 animate-marquee">
-          <span>Free Global Deployment on orders over $500</span>
+          <span>Free Global Deployment on orders over 500 DH</span>
           <span>// System Update: New Tactical Modules Released</span>
           <span>// Archive Drop 08: Now Live</span>
-          <span>Free Global Deployment on orders over $500</span>
+          <span>Free Global Deployment on orders over 500 DH</span>
           <span>// System Update: New Tactical Modules Released</span>
         </div>
       </div>

@@ -217,9 +217,9 @@ const Checkout = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h5 className="text-[12px] font-black uppercase tracking-tight text-slate-950 truncate italic leading-none">{item.title}</h5>
-                      <p className="text-[10px] font-black text-slate-400 mt-2 italic">QTY: {item.quantity} × ${item.price}</p>
+                      <p className="text-[10px] font-black text-slate-400 mt-2 italic">QTY: {item.quantity} × {item.price} DH</p>
                     </div>
-                    <span className="text-sm font-black text-slate-950 italic">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-sm font-black text-slate-950 italic">{(item.price * item.quantity).toFixed(2)} DH</span>
                   </div>
                 ))}
               </div>
@@ -229,18 +229,18 @@ const Checkout = () => {
               <div className="space-y-6">
                 <div className="flex justify-between items-center text-slate-400">
                   <span className="text-[10px] font-black uppercase tracking-widest">Base Subtotal</span>
-                  <span className="text-lg font-black italic text-slate-950">${subtotal.toFixed(2)}</span>
+                  <span className="text-lg font-black italic text-slate-950">{subtotal.toFixed(2)} DH</span>
                 </div>
                 <div className="flex justify-between items-center text-slate-400">
                   <span className="text-[10px] font-black uppercase tracking-widest">Logistic Fee</span>
-                  <span className="text-lg font-black italic text-slate-950">{shipping === 0 ? "EXEMPT" : `$${shipping.toFixed(2)}`}</span>
+                  <span className="text-lg font-black italic text-slate-950">{shipping === 0 ? "EXEMPT" : `${shipping.toFixed(2)} DH`}</span>
                 </div>
                 <div className="flex justify-between items-end pt-4">
                   <div className="space-y-1">
                     <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Grand Total</span>
                     <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest">Taxes Included in Calculation</p>
                   </div>
-                  <span className="text-5xl font-black italic text-slate-950 tracking-tighter leading-[0.8]">${total.toFixed(2)}</span>
+                  <span className="text-5xl font-black italic text-slate-950 tracking-tighter leading-[0.8]">{total.toFixed(2)} DH</span>
                 </div>
               </div>
 

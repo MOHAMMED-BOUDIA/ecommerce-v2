@@ -24,6 +24,7 @@ import Button from "../components/ui/Button";
 import clsx from "clsx";
 import { logout } from "../features/auth/authSlice";
 import { useSEO } from "../hooks/useSEO";
+import orderService from "../features/orders/orderService";
 
 const ModalShell = ({ title, subtitle, children, icon: Icon, color = "text-emerald-500", onClose }) => (
   <motion.div
@@ -71,6 +72,7 @@ const Profile = () => {
   const fileInputRef = useRef(null);
 
   const [activeView, setActiveView] = useState(null);
+  const [realOrders, setRealOrders] = useState([]);
   
   const [userData, setUserData] = useState(() => {
     const saved = localStorage.getItem("vanguard_user_profile");
@@ -96,6 +98,13 @@ const Profile = () => {
   useEffect(() => {
     localStorage.setItem("vanguard_user_profile", JSON.stringify(userData));
   }, [userData]);
+
+  useEffect(() => {
+    if (authUser?.id) {
+      const orders = orderService.getByUserId(authUser.id);
+      setRealOrders(orders);
+    }
+  }, [authUser]);
 
   const [editForm, setEditForm] = useState({ name: userData.name, email: userData.email });
   const [newAddress, setNewAddress] = useState({ label: "", street: "", city: "", zip: "" });
@@ -381,18 +390,30 @@ const Profile = () => {
           {activeView === "orders" && (
             <ModalShell title="Deployment Logs" subtitle="Acquisition History" icon={HiOutlineShoppingBag} color="text-amber-500" onClose={() => setActiveView(null)}>
               <div className="space-y-4">
-                {userData.orders.map(order => (
-                  <div key={order.id} className="p-5 bg-slate-100 rounded-2xl border border-slate-200 flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="text-slate-950 font-bold text-sm italic">#{order.id}</span>
-                      <span className="text-[10px] text-emerald-600 font-bold uppercase mt-1">{order.status}</span>
+                {realOrders.length > 0 ? (
+                  realOrders.map(order => (
+                    <div key={order.id} className="p-5 bg-slate-100 rounded-2xl border border-slate-200 flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-slate-950 font-bold text-sm italic">#{order.id}</span>
+                        <span className={`text-[10px] font-bold uppercase mt-1 ${
+                          order.status === 'Delivered' ? 'text-emerald-600' : 
+                          order.status === 'Cancelled' ? 'text-red-600' : 'text-amber-600'
+                        }`}>{order.status}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-emerald-600 font-bold text-sm italic">{order.total.toLocaleString()} DH</span>
+                        <p className="text-[10px] text-slate-500 uppercase mt-1">
+                          {new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-emerald-600 font-bold text-sm">{order.total.toLocaleString()} DH</span>
-                      <p className="text-[10px] text-slate-500 uppercase mt-1">{order.date}</p>
-                    </div>
+                  ))
+                ) : (
+                  <div className="py-12 text-center">
+                    <HiOutlineShoppingBag className="mx-auto w-12 h-12 text-slate-200 mb-4" />
+                    <p className="text-slate-500 italic text-sm font-sans tracking-wide uppercase">No acquisition logs detected.</p>
                   </div>
-                ))}
+                )}
               </div>
             </ModalShell>
           )}

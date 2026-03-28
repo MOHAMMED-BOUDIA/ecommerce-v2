@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchProducts } from "../services/productService";
+import { productDataService } from "../services/productDataService";
 import CollectionTemplate from "../components/ui/CollectionTemplate";
 import { useSEO } from "../hooks/useSEO";
 
@@ -13,13 +13,14 @@ const TheLab = () => {
     canonical: 'https://vanguard.store/the-lab',
   });
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchProducts().then(data => {
-      setProducts(data.filter(p => p.collection === "The Lab"));
-      setLoading(false);
-    });
+    setLoading(true);
+    const allProducts = productDataService.getAll();
+    const labProducts = allProducts.filter(p => p.isFeatured || p.isBestSeller).sort((a, b) => b.rating - a.rating);
+    setProducts(labProducts);
+    setLoading(false);
   }, []);
 
   const config = {

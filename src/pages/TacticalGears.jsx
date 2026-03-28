@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchProducts } from "../services/productService";
+import { productDataService } from "../services/productDataService";
 import CollectionTemplate from "../components/ui/CollectionTemplate";
 import { useSEO } from "../hooks/useSEO";
 
@@ -13,13 +13,14 @@ const TacticalGears = () => {
     canonical: 'https://vanguard.store/tactical-gears',
   });
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchProducts().then(data => {
-      setProducts(data.filter(p => p.tags.includes("tactical")));
-      setLoading(false);
-    });
+    setLoading(true);
+    const allProducts = productDataService.getAll();
+    const tacProducts = allProducts.filter(p => p.tags && p.tags.some(tag => tag.toLowerCase().includes('tactical')));
+    setProducts(tacProducts);
+    setLoading(false);
   }, []);
 
   const config = {

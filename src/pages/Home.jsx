@@ -44,7 +44,7 @@ import FeaturesHighlights from "../features/home/components/FeaturesHighlights";
 import Testimonials from "../features/home/components/Testimonials";
 import BrandLogos from "../features/home/components/BrandLogos";
 import NewsletterSection from "../features/home/components/NewsletterSection";
-import { products } from "../data/products";
+import { productDataService } from "../services/productDataService";
 
 // --- PREMIMUM GALLERY COMPONENTS ---
 const ArchiveItem = ({ item, colIdx, i }) => {
@@ -309,7 +309,8 @@ const Home = () => {
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const deploymentProducts = products.filter((product) => product.isFeatured).slice(0, 3);
+  const allProducts = productDataService.getAll();
+  const deploymentProducts = allProducts.filter((product) => product.isFeatured).slice(0, 3);
   const formatPrice = (value) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
