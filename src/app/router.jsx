@@ -19,6 +19,9 @@ const TacticalGears = lazy(() => import('../pages/TacticalGears'));
 const TheLab = lazy(() => import('../pages/TheLab'));
 const Checkout = lazy(() => import('../features/checkout/pages/Checkout'));
 const OrderSuccess = lazy(() => import('../features/checkout/pages/OrderSuccess'));
+const Privacy = lazy(() => import('../pages/Privacy'));
+const Cookies = lazy(() => import('../pages/Cookies'));
+const Returns = lazy(() => import('../pages/Returns'));
 
 // Optimized Loading Wrapper for better LCP
 const LoadingWrapper = ({ children }) => (
@@ -108,6 +111,21 @@ export const router = createBrowserRouter([
       {
         path: 'the-lab',
         element: <LoadingWrapper><TheLab /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'privacy',
+        element: <LoadingWrapper><Privacy /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'cookies',
+        element: <LoadingWrapper><Cookies /></LoadingWrapper>,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: 'returns',
+        element: <LoadingWrapper><Returns /></LoadingWrapper>,
         errorElement: <ErrorBoundary />,
       },
       {

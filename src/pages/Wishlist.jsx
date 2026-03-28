@@ -119,7 +119,7 @@ const Wishlist = () => {
           >
             <div className="w-40 h-40 bg-slate-50 rounded-[4rem] flex items-center justify-center text-slate-200 relative">
               <HiOutlineHeart size={80} strokeWidth={1} />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-dashed border-slate-100 rounded-full animate-[spin_20s_linear_infinite]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-dashed border-black rounded-full animate-[spin_20s_linear_infinite]" />
             </div>
             <div className="space-y-2">
               <h2 className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter">Curation Offline.</h2>

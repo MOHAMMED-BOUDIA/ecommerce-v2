@@ -3,13 +3,13 @@ import { motion } from 'framer-motion';
 
 const BrandStory = () => {
   return (
-    <section className="py-40 bg-[#0a0a0a] overflow-hidden relative">
+    <section className="py-16 md:py-24 lg:py-40 bg-[#0a0a0a] overflow-hidden relative">
       {/* Background visual texture */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#0f0f0f] -z-0" />
       <div className="absolute top-1/2 left-0 w-full h-[1px] bg-white/5 -z-0" />
 
-      <div className="container-custom px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      <div className="container-custom px-4 md:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center">
           {/* Visual Side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -26,7 +26,7 @@ const BrandStory = () => {
               />
             </div>
             {/* Design Spec Overlay */}
-            <div className="absolute -bottom-10 -right-10 bg-white p-10 hidden md:block">
+            <div className="absolute -bottom-8 md:-bottom-10 -right-8 md:-right-10 bg-white p-6 md:p-8 lg:p-10 hidden md:block">
               <span className="text-black text-[10px] font-black uppercase tracking-[0.5em] block mb-2">// SPEC 8.4</span>
               <p className="text-black text-lg font-black italic uppercase leading-none tracking-tighter">
                 UNCOMPROMISING<br />INTEGRITY.
@@ -40,13 +40,13 @@ const BrandStory = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, delay: 0.3 }}
-            className="space-y-12"
+            className="space-y-8 md:space-y-12"
           >
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <span className="text-[10px] font-black uppercase tracking-[0.8em] text-white/30 italic block">
                 // ORIGIN STORY
               </span>
-              <h2 className="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter leading-none -indent-[0.05em]">
+              <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-white italic uppercase tracking-tighter leading-tight md:leading-none -indent-[0.05em]">
                 BORN FROM <br />SILENCE.
               </h2>
             </div>

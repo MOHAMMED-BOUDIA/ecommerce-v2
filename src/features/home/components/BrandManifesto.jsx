@@ -7,12 +7,12 @@ import { motion, useScroll, useTransform } from 'framer-motion';
  */
 const BrandManifesto = () => {
   return (
-    <section className="bg-black py-40 md:py-80 overflow-hidden relative">      
-      <div className="container-custom px-6 relative z-10">
-        <div className="max-w-7xl mx-auto space-y-40">
+    <section className="bg-black py-24 md:py-40 lg:py-80 overflow-hidden relative">      
+      <div className="container-custom relative z-10">
+        <div className="max-w-7xl mx-auto space-y-16 md:space-y-24 lg:space-y-40">
 
-          <div className="space-y-12">
-            <span className="text-[10px] md:text-sm font-black uppercase tracking-[1em] text-white/30 block mb-10 text-center animate-pulse">
+          <div className="space-y-6 md:space-y-12">
+            <span className="text-[9px] md:text-[10px] lg:text-sm font-black uppercase tracking-[1em] text-white/30 block mb-6 md:mb-10 text-center animate-pulse">
               PHILOSOPHY // THE MANIFESTO
             </span>
             <motion.h2
@@ -20,7 +20,7 @@ const BrandManifesto = () => {
                whileInView={{ opacity: 1, scale: 1 }}
                viewport={{ once: true }}
                transition={{ duration: 1.5 }}
-               className="text-[10vw] md:text-[8vw] lg:text-[7vw] font-black leading-[0.8] uppercase italic tracking-tighter text-center text-white -indent-[0.05em]"
+               className="text-3xl md:text-5xl lg:text-7xl xl:text-8xl font-black leading-tight md:leading-[0.8] uppercase italic tracking-tighter text-center text-white -indent-[0.05em]"
             >
               WE DO NOT <br />
               <span className="text-white/20">JUST CREATE.</span> <br />        
@@ -28,8 +28,8 @@ const BrandManifesto = () => {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-40 items-start">
-             <div className="space-y-20 lg:pt-40">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 xl:gap-40 items-start">
+             <div className="space-y-8 md:space-y-12 lg:space-y-20 lg:pt-12 xl:pt-40">
                 <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.5em] leading-loose">
                    01 // THE MISSION <br />
                    To redefine the concept of utility by merging futuristic engineering with human ergonomic requirements.
@@ -41,15 +41,15 @@ const BrandManifesto = () => {
                 </p>
              </div>
 
-             <div className="space-y-12">
-                <p className="text-white/60 text-xl md:text-3xl font-medium italic leading-relaxed tracking-wide">
+             <div className="space-y-6 md:space-y-8 lg:space-y-12">
+                <p className="text-white/60 text-base md:text-lg lg:text-xl xl:text-3xl font-medium italic leading-relaxed tracking-wide">
                   The Vanguard Archives is more than a store. 
                   It is a research laboratory exploring the 
                   limits of material science and technical 
                   design. We believe that form is the logical 
                   conclusion of optimal function.
                 </p>
-                <p className="text-white/30 text-base md:text-lg font-medium italic leading-relaxed tracking-wide">
+                <p className="text-white/30 text-sm md:text-base lg:text-lg font-medium italic leading-relaxed tracking-wide">
                   Every deployment in our archive is tested 
                   in extreme environments to ensure 
                   absolute resilience and adaptability 

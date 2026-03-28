@@ -25,29 +25,29 @@ const testimonials = [
  */
 const Testimonials = () => {
   return (
-    <section className="py-40 bg-[#0f0f0f] relative overflow-hidden">
+    <section className="py-16 md:py-24 lg:py-40 bg-[#0f0f0f] relative overflow-hidden">
       {/* Background Micro-Grid */}
       <div className="absolute inset-0 opacity-10 pointer-events-none" 
         style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
       />
 
-      <div className="container-custom px-6 relative z-10">
+      <div className="container-custom px-4 md:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
-          className="text-center mb-24"
+          className="text-center mb-12 md:mb-16 lg:mb-24"
         >
           <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/30 italic">
             // USER ARCHIVE // INTEL
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mt-8 tracking-tighter uppercase italic -indent-[0.05em]">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white mt-8 tracking-tighter uppercase italic -indent-[0.05em]">
             THE HUMAN <br />ELEMENT.
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 xl:gap-16">
           {testimonials.map((item, index) => (
             <motion.div
               key={index}
@@ -58,11 +58,11 @@ const Testimonials = () => {
               className="flex flex-col relative group"
             >
               {/* Large Quotation Mark - Stylized */}
-              <div className="absolute -top-12 -left-6 text-white/5 text-[120px] font-black select-none group-hover:text-white/10 transition-colors duration-700 leading-none">
+              <div className="absolute -top-12 -left-6 text-white/5 text-6xl md:text-8xl lg:text-[120px] font-black select-none group-hover:text-white/10 transition-colors duration-700 leading-none">
                 "
               </div>
               
-              <blockquote className="text-xl md:text-2xl text-white/70 italic font-medium leading-relaxed tracking-tight mb-12 relative z-10">
+              <blockquote className="text-base md:text-lg lg:text-xl xl:text-2xl text-white/70 italic font-medium leading-relaxed tracking-tight mb-12 relative z-10">
                 {item.quote}
               </blockquote>
 

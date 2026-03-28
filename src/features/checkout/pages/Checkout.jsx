@@ -41,18 +41,18 @@ const Checkout = () => {
 
   if (isComplete) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-20 px-6 text-center italic">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-16 md:pt-20 px-4 md:px-6 text-center italic">
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="space-y-12 max-w-lg"
+          className="space-y-8 md:space-y-12 max-w-lg"
         >
-          <div className="w-32 h-32 bg-emerald-500 text-slate-950 rounded-[3rem] flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/20 rotate-12">
+          <div className="w-24 md:w-32 h-24 md:h-32 bg-emerald-500 text-slate-950 rounded-2xl md:rounded-[3rem] flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/20 rotate-12">
             <HiOutlineCheckCircle size={64} />
           </div>
-          <div className="space-y-4">
-            <span className="text-emerald-600 text-[10px] font-black uppercase tracking-[0.5em]">Transmission Successful</span>
-            <h1 className="text-6xl font-black text-slate-950 tracking-tighter uppercase leading-none">
+          <div className="space-y-3 md:space-y-4">
+            <span className="text-emerald-600 text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em]">Transmission Successful</span>
+            <h1 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter uppercase leading-none">
               Deployment <span className="text-emerald-500">Confirmed.</span>
             </h1>
             <p className="text-[11px] text-slate-400 font-black uppercase tracking-widest leading-relaxed">
@@ -60,7 +60,7 @@ const Checkout = () => {
             </p>
           </div>
           <Link to="/shop">
-            <Button className="h-20 px-12 rounded-[2rem] bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 shadow-xl">
+            <Button className="h-12 md:h-14 lg:h-20 px-6 md:px-12 rounded-xl md:rounded-[2rem] bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 shadow-xl text-xs md:text-base">
               RETURN TO COMMAND <HiOutlineArrowRight className="ml-3" />
             </Button>
           </Link>
@@ -70,35 +70,35 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-40 pb-20 px-6 sm:px-8 italic text-slate-950">
+    <div className="min-h-screen bg-white pt-24 md:pt-40 pb-12 md:pb-20 px-4 md:px-6 sm:px-8 italic text-slate-950">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-          <div className="space-y-4">
-            <span className="text-emerald-600 text-[10px] font-black uppercase tracking-[0.5em]">Transaction Protocol</span>
-            <h1 className="text-8xl font-black text-slate-950 uppercase tracking-tighter leading-[0.8]">
+        <header className="mb-12 md:mb-20 flex flex-col lg:flex-row lg:items-end justify-between gap-6 md:gap-8">
+          <div className="space-y-2 md:space-y-4">
+            <span className="text-emerald-600 text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em]">Transaction Protocol</span>
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-950 uppercase tracking-tighter leading-tight lg:leading-[0.8]">
               Final <span className="text-emerald-500">Authorization.</span>
             </h1>
           </div>
           
-          <div className="flex items-center gap-4 bg-slate-50 px-8 py-4 rounded-3xl border border-slate-100">
-            <HiOutlineLockClosed size={24} className="text-emerald-500" />
+          <div className="flex items-center gap-2 md:gap-4 bg-slate-50 px-4 md:px-8 py-2 md:py-4 rounded-lg md:rounded-3xl border border-slate-100">
+            <HiOutlineLockClosed size={16} md:size="24" className="text-emerald-500 flex-shrink-0" />
             <div className="text-left">
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Security Layer</p>
-              <p className="text-[12px] font-black text-slate-950 uppercase">AES-256 ENCRYPTED</p>
+              <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-400">Security Layer</p>
+              <p className="text-[10px] md:text-[12px] font-black text-slate-950 uppercase">AES-256 ENCRYPTED</p>
             </div>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 lg:gap-20">
           <div className="lg:col-span-7 space-y-12">
             {/* Step Indicators */}
-            <div className="flex items-center gap-8 mb-16">
+            <div className="flex items-center gap-4 md:gap-8 mb-8 md:mb-16 overflow-x-auto md:overflow-auto">
               {[1, 2, 3].map((s) => (
-                <div key={s} className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${step >= s ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-300'}`}>
+                <div key={s} className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                  <div className={`w-8 md:w-10 h-8 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center font-black text-xs md:text-base ${step >= s ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-300'}`}>
                     {s}
                   </div>
-                  <div className={`h-[2px] w-12 rounded-full ${step > s ? 'bg-emerald-500' : 'bg-slate-100'}`} />
+                  <div className={`h-[2px] w-8 md:w-12 rounded-full ${step > s ? 'bg-emerald-500' : 'bg-slate-100'}`} />
                 </div>
               ))}
             </div>
@@ -116,22 +116,22 @@ const Checkout = () => {
                     <h3 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-4">
                       <HiOutlineMapPin className="text-emerald-500" /> Drop Zone Coordinates
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-4">Full Identity</label>
-                        <input className="w-full bg-slate-50 border border-slate-100 rounded-2xl h-16 px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[10px] tracking-widest" placeholder="ALEX KIRA" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                      <div className="space-y-2 md:space-y-3">
+                        <label className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-400 ml-3 md:ml-4">Full Identity</label>
+                        <input className="w-full bg-slate-50 border border-slate-100 rounded-lg md:rounded-2xl h-12 md:h-16 px-4 md:px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[9px] md:text-[10px] tracking-widest" placeholder="ALEX KIRA" />
                       </div>
-                      <div className="space-y-3">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-4">Comms Link</label>
-                        <input className="w-full bg-slate-50 border border-slate-100 rounded-2xl h-16 px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[10px] tracking-widest" placeholder="ID@STORAGE.IO" />
+                      <div className="space-y-2 md:space-y-3">
+                        <label className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-400 ml-3 md:ml-4">Comms Link</label>
+                        <input className="w-full bg-slate-50 border border-slate-100 rounded-lg md:rounded-2xl h-12 md:h-16 px-4 md:px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[9px] md:text-[10px] tracking-widest" placeholder="ID@STORAGE.IO" />
                       </div>
-                      <div className="md:col-span-2 space-y-3">
-                        <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-4">Sector Address</label>
-                        <input className="w-full bg-slate-50 border border-slate-100 rounded-2xl h-16 px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[10px] tracking-widest" placeholder="NEON DISTRICT, BLOCK 42" />
+                      <div className="md:col-span-2 space-y-2 md:space-y-3">
+                        <label className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-400 ml-3 md:ml-4">Sector Address</label>
+                        <input className="w-full bg-slate-50 border border-slate-100 rounded-lg md:rounded-2xl h-12 md:h-16 px-4 md:px-6 focus:border-emerald-500 outline-none transition-premium font-black uppercase text-[9px] md:text-[10px] tracking-widest" placeholder="NEON DISTRICT, BLOCK 42" />
                       </div>
                     </div>
                   </div>
-                  <Button onClick={() => setStep(2)} className="h-20 px-12 rounded-[2rem] bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 shadow-xl">
+                  <Button onClick={() => setStep(2)} className="w-full h-12 md:h-16 lg:h-20 px-6 md:px-12 rounded-lg md:rounded-[2rem] bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 shadow-xl text-xs md:text-base">
                     PROCEED TO GATEWAY <HiOutlineArrowRight className="ml-3" />
                   </Button>
                 </motion.div>

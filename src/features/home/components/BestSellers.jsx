@@ -29,18 +29,18 @@ const bestSellers = [
 
 const BestSellers = () => {
   return (
-    <section className="py-32 bg-[#0a0a0a]">
-      <div className="container-custom px-6">
-        <div className="flex flex-col md:flex-row items-baseline gap-4 mb-20">
-          <h2 className="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter -indent-[0.05em]">
+    <section className="py-16 md:py-24 lg:py-32 bg-[#0a0a0a]">
+      <div className="container-custom px-4 md:px-6">
+        <div className="flex flex-col md:flex-row md:items-baseline gap-3 md:gap-4 mb-12 md:mb-20">
+          <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-white italic uppercase tracking-tighter -indent-[0.05em]">
             STAPLES.
           </h2>
-          <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/30 italic">
+          <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-white/30 italic">
             // MOST DEPLOYED UNITS
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
           {bestSellers.map((item, index) => (
             <motion.div
               key={item.id}
@@ -50,22 +50,22 @@ const BestSellers = () => {
               transition={{ delay: index * 0.1, duration: 0.8 }}
               className="group"
             >
-              <div className="relative aspect-square overflow-hidden bg-zinc-900 border border-white/5">
+              <div className="relative aspect-square overflow-hidden bg-zinc-900 border border-white/5 rounded-lg md:rounded-xl">
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
                 />
-                <div className="absolute top-6 left-6 text-[4vw] font-black italic text-white/5 leading-none group-hover:text-white/10 transition-colors duration-700">
+                <div className="absolute top-4 md:top-6 left-4 md:left-6 text-3xl md:text-5xl lg:text-6xl font-black italic text-white/5 leading-none group-hover:text-white/10 transition-colors duration-700">
                   {item.metric}
                 </div>
               </div>
-              <div className="mt-8 flex justify-between items-end">
-                <div>
-                  <h3 className="text-xl font-black text-white italic uppercase tracking-tight">{item.name}</h3>
-                  <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Tier 01 Core</span>
+              <div className="mt-4 md:mt-6 lg:mt-8 flex justify-between items-end gap-2">
+                <div className="flex-1">
+                  <h3 className="text-sm md:text-base lg:text-lg font-black text-white italic uppercase tracking-tight line-clamp-1">{item.name}</h3>
+                  <span className="text-[8px] md:text-[9px] lg:text-[10px] font-black text-white/20 uppercase tracking-[0.15em] md:tracking-[0.2em]">Tier 01 Core</span>
                 </div>
-                <span className="text-sm font-black text-white italic">{item.price}</span>
+                <span className="text-xs md:text-sm font-black text-white italic whitespace-nowrap">{item.price}</span>
               </div>
             </motion.div>
           ))}

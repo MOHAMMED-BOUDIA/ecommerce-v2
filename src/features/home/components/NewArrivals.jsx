@@ -22,10 +22,10 @@ const products = [
 
 const NewArrivals = () => {
     return (
-        <section className="py-24 bg-[#0a0a0a] overflow-hidden">
-            <div className="container-custom px-6 relative">
+        <section className="py-16 md:py-24 lg:py-32 bg-[#0a0a0a] overflow-hidden">
+            <div className="container-custom px-4 md:px-6 relative">
                 {/* Section Header */}
-                <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-8">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 md:mb-24 gap-6 md:gap-8">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -36,7 +36,7 @@ const NewArrivals = () => {
                         <span className="text-[10px] font-black uppercase tracking-[0.8em] text-white/40 block italic">
                             // NEW DEPLOYMENTS
                         </span>
-                        <h2 className="text-5xl md:text-7xl lg:text-9xl font-black text-white italic uppercase tracking-tighter leading-none -indent-[0.05em]">
+                        <h2 className="text-3xl md:text-5xl lg:text-7xl xl:text-8xl font-black text-white italic uppercase tracking-tighter leading-tight md:leading-none -indent-[0.05em]">
                             THE <br />NEW<br />PROTO.
                         </h2>
                     </motion.div>
@@ -51,7 +51,7 @@ const NewArrivals = () => {
                             as={Link}
                             to="/shop"
                             variant="white"
-                            className="px-16 h-20 bg-white text-black hover:bg-[#e2e2e2] transition-all duration-700 rounded-none italic font-black text-xs tracking-widest uppercase"
+                            className="px-6 md:px-16 h-12 md:h-20 bg-white text-black hover:bg-[#e2e2e2] transition-all duration-700 rounded-none italic font-black text-[9px] md:text-xs tracking-widest uppercase"
                         >
                             View All Proto
                         </Button>
@@ -60,13 +60,13 @@ const NewArrivals = () => {
 
                 {/* Vertical Text Side Decoration */}
                 <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 origin-right -rotate-90">
-                    <span className="text-[14vw] font-black italic text-white/5 tracking-tighter uppercase whitespace-nowrap leading-none">
+                    <span className="text-2xl md:text-4xl lg:text-6xl xl:text-8xl font-black italic text-white/5 tracking-tighter uppercase whitespace-nowrap leading-none">
                         VANGUARD 2026
                     </span>
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 relative z-10 lg:pr-32">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 lg:gap-16 xl:gap-24 relative z-10 lg:pr-8 xl:pr-32">
                     {products.map((product, index) => (
                         <motion.div
                             key={product.id}

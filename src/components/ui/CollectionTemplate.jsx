@@ -126,23 +126,23 @@ const CollectionTemplate = ({
     : "0";
 
   return (
-    <div className="min-h-screen bg-white pt-40 pb-24 transition-colors duration-500">
-      <div className="container-custom">
-        <header className="grid gap-10 border-b border-slate-200 pb-12 lg:grid-cols-[1.2fr,0.8fr] lg:items-end">
-          <div className="space-y-5 max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/15 bg-emerald-500/8 px-4 py-2 text-[9px] font-black uppercase tracking-[0.45em] text-emerald-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_14px_rgba(16,185,129,0.85)]" />
+    <div className="min-h-screen bg-white pt-32 md:pt-40 pb-16 md:pb-24 transition-colors duration-500">
+      <div className="container-custom px-4 md:px-6">
+        <header className="grid gap-6 md:gap-10 border-b border-slate-200 pb-8 md:pb-12 lg:grid-cols-[1.2fr,0.8fr] lg:items-end">
+          <div className="space-y-4 md:space-y-5 max-w-3xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/15 bg-emerald-500/8 px-3 md:px-4 py-1.5 md:py-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.45em] text-emerald-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_14px_rgba(16,185,129,0.85)] flex-shrink-0" />
               {config.subtitle}
             </span>
-            <h1 className="flex flex-wrap gap-4 text-6xl font-black leading-none tracking-tighter text-slate-950 uppercase italic md:text-8xl">
+            <h1 className="flex flex-wrap gap-2 md:gap-4 text-4xl md:text-6xl lg:text-8xl font-black leading-tight md:leading-none tracking-tighter text-slate-950 uppercase italic">
               {config.title} <span className="text-emerald-600">{config.highlight}</span>
             </h1>
-            <p className="max-w-2xl text-sm md:text-base leading-relaxed text-slate-600">
+            <p className="max-w-2xl text-xs md:text-sm lg:text-base leading-relaxed text-slate-600">
               Curated premium collection with exceptional variety, realistic product data, and premium styling for the discerning customer.
             </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="hidden md:grid gap-4 sm:grid-cols-3">
             {[
               { label: "Total", value: String(products.length).padStart(2, "0"), suffix: "Products" },
               { label: "Avg Rating", value: avgRating, suffix: "Stars" },
@@ -164,9 +164,9 @@ const CollectionTemplate = ({
           </div>
         </header>
 
-        <div className="mt-8 rounded-[2rem] border border-slate-200 bg-slate-50/85 p-4 md:p-5 shadow-[0_16px_55px_rgba(15,23,42,0.05)] backdrop-blur-sm">
-          <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-            <nav className="flex flex-wrap gap-3 overflow-x-auto pb-2 no-scrollbar" aria-label="Product Categories">
+        <div className="mt-6 md:mt-8 rounded-lg md:rounded-[2rem] border border-slate-200 bg-slate-50/85 p-3 md:p-5 shadow-[0_16px_55px_rgba(15,23,42,0.05)] backdrop-blur-sm">
+          <div className="flex flex-col gap-4 md:gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <nav className="flex flex-wrap gap-2 md:gap-3 overflow-x-auto pb-2 no-scrollbar" aria-label="Product Categories">
               {categories.map((category) => {
                 const isActive = activeCategory === category;
                 const categoryCount = category === "all" ? products.length : products.filter((product) => product.category === category).length;
@@ -195,11 +195,11 @@ const CollectionTemplate = ({
               })}
             </nav>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <div className="flex flex-col gap-2 md:gap-3 sm:flex-row sm:items-center sm:justify-end">
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white p-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
+                className="inline-flex items-center gap-1.5 md:gap-2 rounded-full border border-slate-200 bg-white p-1 md:p-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
                 role="group"
                 aria-label="View Mode Toggle"
               >
@@ -209,14 +209,14 @@ const CollectionTemplate = ({
                   onClick={() => setViewMode("grid")}
                   aria-label="Grid View"
                   aria-pressed={viewMode === "grid"}
-                  className={`flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ${
+                  className={`flex h-8 md:h-11 w-8 md:w-11 items-center justify-center rounded-full transition-all duration-300 ${
                     viewMode === "grid"
                       ? "bg-slate-950 text-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
                       : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                   }`}
                   title="Grid view"
                 >
-                  <HiOutlineSquares2X2 size={18} aria-hidden="true" />
+                  <HiOutlineSquares2X2 size={16} className="md:w-[18px] md:h-[18px]" aria-hidden="true" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -224,14 +224,14 @@ const CollectionTemplate = ({
                   onClick={() => setViewMode("list")}
                   aria-label="List View"
                   aria-pressed={viewMode === "list"}
-                  className={`flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300 ${
+                  className={`flex h-8 md:h-11 w-8 md:w-11 items-center justify-center rounded-full transition-all duration-300 ${
                     viewMode === "list"
                       ? "bg-slate-950 text-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
                       : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                   }`}
                   title="List view"
                 >
-                  <HiOutlineQueueList size={18} aria-hidden="true" />
+                  <HiOutlineQueueList size={16} className="md:w-[18px] md:h-[18px]" aria-hidden="true" />
                 </motion.button>
               </motion.div>
 
@@ -239,21 +239,21 @@ const CollectionTemplate = ({
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-gradient-to-r from-white to-slate-50/80 px-1.5 py-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
+                className="inline-flex items-center gap-1 md:gap-1.5 rounded-full border border-slate-200 bg-gradient-to-r from-white to-slate-50/80 px-1 md:px-1.5 py-1 md:py-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
               >
-                <div className="px-3 py-2 text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Sort:</div>
+                <div className="px-2 md:px-3 py-1 md:py-2 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-500">Sort:</div>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleSortToggle}
-                  className="group inline-flex h-11 items-center gap-2 rounded-full border border-slate-300 bg-slate-950 px-4 text-[9px] font-black uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500 hover:text-slate-950 hover:shadow-[0_10px_28px_rgba(16,185,129,0.15)]"
+                  className="group inline-flex h-8 md:h-11 items-center gap-1.5 md:gap-2 rounded-full border border-slate-300 bg-slate-950 px-2.5 md:px-4 text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-white transition-all duration-300 hover:border-emerald-400 hover:bg-emerald-500 hover:text-slate-950 hover:shadow-[0_10px_28px_rgba(16,185,129,0.15)]"
                   aria-label={`Current sorting: ${getSortLabel()}. Click to change.`}
                   title="Click to cycle through sorting options"
                 >
                   <HiOutlineAdjustmentsHorizontal
-                    size={15}
+                    size={12}
+                    className="md:w-[15px] md:h-[15px] transition-transform duration-300 group-hover:rotate-12"
                     aria-hidden="true"
-                    className="transition-transform duration-300 group-hover:rotate-12"
                   />
                   <span className="hidden sm:inline">{getSortLabel()}</span>
                 </motion.button>

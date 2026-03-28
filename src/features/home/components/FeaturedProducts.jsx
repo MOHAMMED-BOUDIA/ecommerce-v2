@@ -62,26 +62,26 @@ const EditorialProductCard = ({ product, index }) => (
 
 const FeaturedProducts = () => {
   return (
-    <section className="bg-white py-40">
-      <div className="container-custom px-6">
+    <section className="bg-white py-24 md:py-40">
+      <div className="container-custom px-4 md:px-6">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-24">
-          <div className="space-y-6 max-w-2xl">
-            <span className="text-[10px] font-black uppercase tracking-[0.8em] text-black/30">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 md:gap-10 mb-16 md:mb-24">
+          <div className="space-y-4 md:space-y-6 max-w-2xl">
+            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.6em] md:tracking-[0.8em] text-black/30">
               Selection: Curated
             </span>
-            <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-[0.85]">
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-black uppercase italic tracking-tighter leading-tight md:leading-[0.85]">
               ESSENTIAL <br />
               <span className="text-black/20">DEPLOYMENTS.</span>
             </h2>
           </div>
-          <Link to="/shop" className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] pb-2 border-b-2 border-black/5 hover:border-black transition-all">
-            Full Archive <HiOutlineArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
+          <Link to="/shop" className="group flex items-center gap-2 md:gap-4 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] pb-2 border-b-2 border-black/5 hover:border-black transition-all w-fit">
+            Full Archive <HiOutlineArrowRight size={12} className="md:w-[14px] md:h-[14px] group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-12">
           {MOCK_PRODUCTS.map((product, i) => (
             <EditorialProductCard key={product.id} product={product} index={i} />
           ))}

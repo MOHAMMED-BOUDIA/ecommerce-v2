@@ -21,9 +21,9 @@ const ProcessSection = () => {
   ];
 
   return (
-    <section className="py-40 bg-zinc-950 relative overflow-hidden">
-      <div className="container-custom px-6">
-        <div className="flex flex-col md:flex-row items-end gap-12 mb-32">
+    <section className="py-16 md:py-24 lg:py-40 bg-zinc-950 relative overflow-hidden">
+      <div className="container-custom px-4 md:px-6">
+        <div className="flex flex-col md:flex-row items-end gap-6 md:gap-12 mb-12 md:mb-20 lg:mb-32">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -31,7 +31,7 @@ const ProcessSection = () => {
             transition={{ duration: 1.5 }}
             className="flex-shrink-0"
           >
-            <h2 className="text-[12vw] md:text-[8vw] font-black text-white italic uppercase tracking-tighter leading-none -indent-[0.05em]">
+            <h2 className="text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-black text-white italic uppercase tracking-tighter leading-tight md:leading-none -indent-[0.05em]">
               THE <br />PROCESS.
             </h2>
           </motion.div>
@@ -40,7 +40,7 @@ const ProcessSection = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, delay: 0.5 }}
-            className="text-white/40 text-sm md:text-base font-medium max-w-sm mb-4 leading-relaxed tracking-wide border-b border-white/10 pb-12 italic"
+            className="text-white/40 text-xs md:text-sm lg:text-base font-medium max-w-sm mb-4 leading-relaxed tracking-wide border-b border-white/10 pb-6 md:pb-12 italic"
           >
             Behind every piece of Vanguard tech lies a rigorous sequence of engineering iterations.
           </motion.p>
@@ -54,7 +54,7 @@ const ProcessSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2, duration: 1.2 }}
-              className="p-12 md:p-16 hover:bg-white/5 transition-colors duration-1000 group cursor-crosshair"
+              className="p-6 md:p-10 lg:p-12 xl:p-16 hover:bg-white/5 transition-colors duration-1000 group cursor-crosshair"
             >
               <span className="text-emerald-500 font-black text-xs tracking-[0.6em] block mb-12 italic group-hover:tracking-[1em] transition-all duration-700">
                 //{step.id}

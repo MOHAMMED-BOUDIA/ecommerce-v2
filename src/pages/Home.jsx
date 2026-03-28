@@ -129,6 +129,100 @@ const ColumnSection = ({ column, colIdx }) => {
   );
 };
 
+// Newsletter Form Component
+const TransmissionForm = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      setMessage({ type: "error", text: "Please enter your email" });
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setMessage({ type: "error", text: "Please enter a valid email" });
+      return;
+    }
+
+    setLoading(true);
+    setMessage({ type: "", text: "" });
+
+    try {
+      // TODO: Replace with actual API endpoint
+      // For now, simulate API call with localStorage
+      const subscribers = JSON.parse(localStorage.getItem("newsletter_subscribers") || "[]");
+      
+      if (subscribers.includes(email)) {
+        setMessage({ type: "warning", text: "This email is already subscribed" });
+      } else {
+        subscribers.push(email);
+        localStorage.setItem("newsletter_subscribers", JSON.stringify(subscribers));
+        setMessage({ type: "success", text: "Successfully joined the transmission! Check your email for confirmation." });
+        setEmail("");
+      }
+    } catch {
+      setMessage({ type: "error", text: "Failed to subscribe. Please try again." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <motion.div 
+      className="max-w-xl mx-auto space-y-4"
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >    
+      <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+        <input
+          type="email"
+          placeholder="AUTHENTICATE EMAIL..."
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="flex-1 px-10 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold tracking-widest text-xs focus:ring-2 focus:ring-emerald-500 transition-all outline-none focus:bg-white/10 placeholder-slate-500"
+          disabled={loading}
+        />
+        <Button 
+          variant="primary" 
+          className="rounded-full px-12" 
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Initiating..." : "Initiate"}
+        </Button>
+      </form>
+
+      {/* Feedback Message */}
+      {message.text && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`text-sm font-semibold tracking-wide ${
+            message.type === "success" 
+              ? "text-emerald-400" 
+              : message.type === "error"
+                ? "text-red-400"
+                : "text-amber-400"
+          }`}
+        >
+          {message.text}
+        </motion.div>
+      )}
+    </motion.div>
+  );
+};
+
 const Home = () => {
   useSEO({
     title: 'VANGUARD | Premium Tactical Archive - Home',
@@ -720,18 +814,18 @@ const Home = () => {
               as={Link}
               to="/shop"
               variant="transparent"
-              className="group inline-flex min-h-16 items-center rounded-full border border-white/10 bg-slate-950 px-6 pr-4 text-[10px] font-black uppercase tracking-[0.28em] text-white shadow-[0_20px_50px_rgba(0,0,0,0.35)] transition-all duration-300 hover:border-emerald-500/30 hover:bg-slate-900 hover:shadow-[0_24px_60px_rgba(16,185,129,0.12)] active:translate-y-[1px] active:scale-[0.99]"
+              className="group inline-flex min-h-16 items-center rounded-full border border-emerald-500 bg-emerald-500 px-6 pr-4 text-[10px] font-black uppercase tracking-[0.28em] text-slate-950 shadow-[0_20px_50px_rgba(16,185,129,0.3)] transition-all duration-300 hover:border-emerald-600 hover:bg-emerald-600 hover:shadow-[0_24px_60px_rgba(16,185,129,0.4)] active:translate-y-[1px] active:scale-[0.99]"
             >
               <span className="inline-flex items-center gap-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 transition-all duration-300 group-hover:border-emerald-400/40 group-hover:bg-emerald-500 group-hover:text-slate-950">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-950/20 bg-slate-950/10 text-slate-950 transition-all duration-300 group-hover:border-slate-950/40 group-hover:bg-slate-950 group-hover:text-emerald-400">
                   <HiOutlineFingerPrint size={18} />
                 </span>
-                <span className="leading-none text-white transition-colors duration-300 group-hover:text-emerald-100">
+                <span className="leading-none text-slate-950 transition-colors duration-300 group-hover:text-slate-900">
                   Inspect Specs
                 </span>
               </span>
 
-              <span className="ml-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/55 transition-all duration-300 group-hover:border-emerald-500/30 group-hover:bg-emerald-500 group-hover:text-slate-950">
+              <span className="ml-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-950/10 bg-slate-950/10 text-slate-950 transition-all duration-300 group-hover:border-slate-950/20 group-hover:bg-slate-950 group-hover:text-emerald-400">
                 <HiOutlineArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </span>
             </Button>
@@ -1271,22 +1365,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <motion.div 
-            className="max-w-xl mx-auto flex flex-col md:flex-row gap-4"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >    
-            <input
-              type="email"
-              placeholder="AUTHENTICATE EMAIL..."
-              className="flex-1 px-10 py-6 rounded-full bg-white/5 border border-white/10 text-white font-bold tracking-widest text-xs focus:ring-2 focus:ring-emerald-500 transition-all outline-none focus:bg-white/10"
-            />
-            <Button variant="primary" className="rounded-full px-12">
-              Initiate
-            </Button>
-          </motion.div>
+          <TransmissionForm />
         </div>
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
       </section>

@@ -9,12 +9,12 @@ import { Link } from 'react-router-dom';
  */
 const EditorialShowcase = () => {
     return (
-        <section className="py-40 bg-[#0a0a0a] relative overflow-hidden">
+        <section className="py-16 md:py-24 lg:py-40 bg-[#0a0a0a] relative overflow-hidden">
             {/* Background Accent */}
             <div className="absolute top-0 right-0 w-1/3 h-full bg-zinc-900/30 -z-0" />
             
-            <div className="container-custom px-6 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div className="container-custom px-4 md:px-6 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center">
                     {/* Visual Side */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
@@ -31,7 +31,7 @@ const EditorialShowcase = () => {
                             />
                         </div>
                         {/* Technical Label Overlay */}
-                        <div className="absolute -bottom-6 -left-6 bg-white p-8 hidden md:block">
+                        <div className="absolute -bottom-4 md:-bottom-6 -left-4 md:-left-6 bg-white p-4 md:p-6 lg:p-8 hidden md:block">
                             <span className="text-black text-[10px] font-black uppercase tracking-[0.6em] block mb-2">// SPEC 04.9</span>
                             <p className="text-black text-xl font-black italic tracking-tighter uppercase leading-none">
                                 MATERIAL<br />SYNTHESIS.
@@ -45,19 +45,19 @@ const EditorialShowcase = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1.5, delay: 0.3 }}
-                        className="space-y-12"
+                        className="space-y-8 md:space-y-12"
                     >
-                        <div className="space-y-6">
+                        <div className="space-y-4 md:space-y-6">
                             <span className="text-[10px] font-black uppercase tracking-[0.8em] text-white/30 italic block">
                                 // DEEP DIVE ARCHIVE
                             </span>
-                            <h2 className="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter leading-none -indent-[0.05em]">
+                            <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-white italic uppercase tracking-tighter leading-tight md:leading-none -indent-[0.05em]">
                                 THE ART OF <br />PRECISION.
                             </h2>
                         </div>
 
-                        <div className="space-y-8 max-w-lg">
-                            <p className="text-white/50 text-base md:text-lg font-medium leading-relaxed italic border-l border-white/10 pl-8">
+                        <div className="space-y-6 md:space-y-8 max-w-lg">
+                            <p className="text-white/50 text-sm md:text-base lg:text-lg font-medium leading-relaxed italic border-l border-white/10 pl-4 md:pl-8">
                                 Engineering is more than just assembly. It's the calculated fusion of aerospace aesthetics with everyday urban utility.
                             </p>
                             <p className="text-white/30 text-sm leading-relaxed tracking-wide">
@@ -65,11 +65,11 @@ const EditorialShowcase = () => {
                             </p>
                         </div>
 
-                        <div className="pt-8">
+                        <div className="pt-6 md:pt-8">
                             <Button
                                 as={Link}
                                 to="/shop"
-                                className="px-16 h-20 bg-white text-black hover:bg-zinc-200 transition-all duration-700 rounded-none italic font-black text-xs tracking-[0.3em] uppercase"
+                                className="px-6 md:px-16 h-12 md:h-16 lg:h-20 bg-white text-black hover:bg-zinc-200 transition-all duration-700 rounded-none italic font-black text-[9px] md:text-xs tracking-[0.3em] uppercase"
                             >
                                 Explore Series
                             </Button>
