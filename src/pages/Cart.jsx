@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   HiOutlineTrash, 
   HiOutlinePlus, 
@@ -13,8 +13,11 @@ import { removeItem, updateQuantity } from "../features/cart/cartSlice";
 import Button from "../components/ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSEO } from "../hooks/useSEO";
+import { useAuth } from "../hooks/useAuth";
 
 const Cart = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   useSEO({
     title: 'Shopping Cart - VANGUARD',
     description: 'Review and manage your shopping cart at VANGUARD. Proceed to checkout to complete your purchase of premium tactical gear.',
@@ -27,6 +30,14 @@ const Cart = () => {
   const subtotal = items.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0);
   const shipping = subtotal > 500 ? 0 : 25;
   const total = subtotal + shipping;
+
+  const handleCheckout = () => {
+    if (isAuthenticated) {
+      navigate('/checkout');
+    } else {
+      navigate('/login', { state: { from: '/cart' } });
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -97,7 +108,7 @@ const Cart = () => {
                           <HiOutlineTrash size={18} className="md:w-[20px] md:h-[20px]" />
                         </button>
                       </div>
-                      <p className="text-lg md:text-2xl font-black text-emerald-500 italic">${item.price}</p>
+                      <p className="text-lg md:text-2xl font-black text-emerald-500 italic">{item.price} DH</p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-6 lg:gap-10 mt-6 md:mt-8">
@@ -116,7 +127,7 @@ const Cart = () => {
                             <HiOutlinePlus size={14} className="md:w-[16px] md:h-[16px]" />
                           </button>
                        </div>
-                       <span className="text-base md:text-lg lg:text-xl font-black text-slate-950 italic tracking-tight">Total: ${(item.price * item.quantity).toFixed(2)}</span>
+                       <span className="text-base md:text-lg lg:text-xl font-black text-slate-950 italic tracking-tight">Total: {(item.price * item.quantity).toFixed(2)} DH</span>
                     </div>
                   </div>
                 </motion.div>
@@ -132,21 +143,25 @@ const Cart = () => {
                 <div className="space-y-4 md:space-y-6">
                   <div className="flex justify-between items-center text-slate-600">
                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Subtotal</span>
-                    <span className="text-base md:text-lg font-black italic text-slate-950">${subtotal.toFixed(2)}</span>
+                    <span className="text-base md:text-lg font-black italic text-slate-950">{subtotal.toFixed(2)} DH</span>
                   </div>
                   <div className="flex justify-between items-center text-slate-600">
                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Global Transit</span>
-                    <span className="text-base md:text-lg font-black italic text-slate-950">{shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}</span>
+                    <span className="text-base md:text-lg font-black italic text-slate-950">{shipping === 0 ? "FREE" : `${shipping.toFixed(2)} DH`}</span>
                   </div>
                   <div className="h-[1px] bg-slate-200 w-full" />
                   <div className="flex justify-between items-end">
                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-emerald-500">Order Total</span>
-                    <span className="text-3xl md:text-4xl lg:text-5xl font-black italic text-emerald-500 tracking-tighter">${total.toFixed(2)}</span>
+                    <span className="text-3xl md:text-4xl lg:text-5xl font-black italic text-emerald-500 tracking-tighter">{total.toFixed(2)} DH</span>
                   </div>
                 </div>
 
                 <div className="space-y-3 md:space-y-4">
-                  <Button as={Link} to="/checkout" variant="primary" className="w-full rounded-lg md:rounded-[1.5rem] h-14 md:h-16 lg:h-20 bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 flex items-center justify-center gap-2 md:gap-3 text-[9px] md:text-[10px] tracking-widest">
+                  <Button 
+                    onClick={handleCheckout}
+                    variant="primary" 
+                    className="w-full rounded-lg md:rounded-[1.5rem] h-14 md:h-16 lg:h-20 bg-slate-950 text-white hover:bg-emerald-500 hover:text-slate-950 flex items-center justify-center gap-2 md:gap-3 text-[9px] md:text-[10px] tracking-widest"
+                  >
                     Confirm Deployment <HiOutlineArrowRight size={16} className="md:w-[20px] md:h-[20px]" />
                   </Button>
                   <p className="text-[9px] text-center text-slate-600 font-black uppercase tracking-widest flex items-center justify-center gap-2">

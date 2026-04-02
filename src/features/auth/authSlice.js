@@ -47,8 +47,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.role = null;
       
-      // Clear from localStorage
+      // Clear all auth-related persistence
       localStorage.removeItem('vanguard_auth');
+      localStorage.removeItem('vanguard_user_profile');
     },
     restoreAuth: (state, action) => {
       state.user = action.payload.user;

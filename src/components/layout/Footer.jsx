@@ -16,14 +16,17 @@ const Footer = () => {
     {
       title: "Vanguard Hub",
       links: [
-        { label: "Tactical Gears", path: "/tactical-gears" },
+        { label: "Home Base", path: "/" },
         { label: "New Arrivals", path: "/new-arrivals" },
+        { label: "Tactical Gears", path: "/tactical-gears" },
+        
         { label: "The Lab", path: "/the-lab" },
       ],
     },
     {
       title: "Navigation",
       links: [
+        
         { label: "Account Console", path: "/profile" },
         { label: "Wishlist Vault", path: "/wishlist" },
         { label: "Authentication", path: "/login" },

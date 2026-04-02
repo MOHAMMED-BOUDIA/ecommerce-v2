@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import {
   HiOutlineShoppingBag,
@@ -9,11 +10,21 @@ import {
 import { adminProductService, adminOrderService, adminUserService } from '../../services/adminService';
 
 const AdminDashboard = () => {
-  const stats = useMemo(() => {
-    return [
+  const [stats, setStats] = useState([]);
+  const auth = useSelector(state => state.auth);
+  const orders = useSelector(state => state.orders?.orders || []);
+
+  // Recalculate stats whenever data changes
+  useEffect(() => {
+    const totalProducts = adminProductService.getTotalCount();
+    const totalOrders = adminOrderService.getTotalCount();
+    const totalUsers = adminUserService.getTotalCount();
+    const totalRevenue = adminOrderService.getTotalRevenue();
+
+    setStats([
       {
         title: 'Total Products',
-        value: adminProductService.getTotalCount(),
+        value: totalProducts,
         icon: HiOutlineShoppingBag,
         color: 'emerald',
         bg: 'bg-emerald-50',
@@ -21,7 +32,7 @@ const AdminDashboard = () => {
       },
       {
         title: 'Total Orders',
-        value: adminOrderService.getTotalCount(),
+        value: totalOrders,
         icon: HiOutlineClipboardDocumentList,
         color: 'blue',
         bg: 'bg-blue-50',
@@ -29,7 +40,7 @@ const AdminDashboard = () => {
       },
       {
         title: 'Total Users',
-        value: adminUserService.getTotalCount(),
+        value: totalUsers,
         icon: HiOutlineUsers,
         color: 'purple',
         bg: 'bg-purple-50',
@@ -37,14 +48,14 @@ const AdminDashboard = () => {
       },
       {
         title: 'Total Revenue',
-        value: `$${adminOrderService.getTotalRevenue().toLocaleString()}`,
+        value: `${totalRevenue.toLocaleString()} DH`,
         icon: HiOutlineCurrencyDollar,
         color: 'amber',
         bg: 'bg-amber-50',
         textColor: 'text-amber-600',
       },
-    ];
-  }, []);
+    ]);
+  }, [orders]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -104,34 +115,72 @@ const AdminDashboard = () => {
         })}
       </motion.div>
 
-      {/* Recent Activity Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-8 border border-slate-200"
-      >
-        <h2 className="text-2xl font-black text-slate-950 mb-6 uppercase italic tracking-tight">
-          System Overview
-        </h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <span className="text-slate-600 font-semibold">Products In System</span>
-            <span className="text-2xl font-black text-emerald-600">{adminProductService.getTotalCount()}</span>
+      {/* Admin User Info & System Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Admin User Info Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:col-span-1 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200"
+        >
+          <h2 className="text-lg font-black text-slate-950 mb-6 uppercase italic tracking-tight">
+            Admin Profile
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Name</p>
+              <p className="text-xl font-black text-slate-900">
+                {auth?.user?.name || 'Admin User'}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Email</p>
+              <p className="text-sm font-semibold text-slate-700">
+                {auth?.user?.email || 'admin@vanguard.io'}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Role</p>
+              <p className="text-sm font-black text-emerald-600 uppercase tracking-wider">
+                {auth?.role || 'Admin'}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest">Status</p>
+              <p className="text-sm font-black text-green-600 uppercase tracking-wider">Active</p>
+            </div>
           </div>
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <span className="text-slate-600 font-semibold">Active Orders</span>
-            <span className="text-2xl font-black text-blue-600">{adminOrderService.getTotalCount()}</span>
+        </motion.div>
+
+        {/* System Overview */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:col-span-2 bg-white rounded-2xl p-8 border border-slate-200"
+        >
+          <h2 className="text-2xl font-black text-slate-950 mb-6 uppercase italic tracking-tight">
+            System Overview
+          </h2>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="pb-4 border-b border-slate-200">
+              <span className="text-slate-600 font-semibold">Products In System</span>
+              <p className="text-2xl font-black text-emerald-600">{adminProductService.getTotalCount()}</p>
+            </div>
+            <div className="pb-4 border-b border-slate-200">
+              <span className="text-slate-600 font-semibold">Active Orders</span>
+              <p className="text-2xl font-black text-blue-600">{adminOrderService.getTotalCount()}</p>
+            </div>
+            <div className="pb-4 border-b border-slate-200">
+              <span className="text-slate-600 font-semibold">Registered Users</span>
+              <p className="text-2xl font-black text-purple-600">{adminUserService.getTotalCount()}</p>
+            </div>
+            <div className="pb-4 border-b border-slate-200">
+              <span className="text-slate-600 font-semibold">Platform Revenue</span>
+              <p className="text-2xl font-black text-amber-600">{adminOrderService.getTotalRevenue().toLocaleString()} DH</p>
+            </div>
           </div>
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <span className="text-slate-600 font-semibold">Registered Users</span>
-            <span className="text-2xl font-black text-purple-600">{adminUserService.getTotalCount()}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-slate-600 font-semibold">Platform Revenue</span>
-            <span className="text-2xl font-black text-amber-600">${adminOrderService.getTotalRevenue().toLocaleString()}</span>
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

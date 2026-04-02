@@ -6,6 +6,7 @@ import {
   HiOutlinePencil,
   HiOutlineXMark,
   HiOutlineShoppingBag,
+  HiOutlinePhoto,
 } from 'react-icons/hi2';
 import { categoryDataService, productDataService } from '../../services/productDataService';
 import ProductForm from '../../features/admin/components/ProductForm';
@@ -18,6 +19,8 @@ const AdminCategories = () => {
   const [formData, setFormData] = useState({ name: '', description: '' });
   const [editingProduct, setEditingProduct] = useState(null);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [imageErrors, setImageErrors] = useState({});
+  const [productImageErrors, setProductImageErrors] = useState({});
 
   const loadCategories = () => {
     const allCats = categoryDataService.getAll();
@@ -35,10 +38,14 @@ const AdminCategories = () => {
   const handleOpenModal = (category = null) => {
     if (category) {
       setEditingId(category.id);
-      setFormData({ name: category.name, description: category.description });
+      setFormData({ 
+        name: category.name, 
+        description: category.description,
+        image: category.image || '',
+      });
     } else {
       setEditingId(null);
-      setFormData({ name: '', description: '' });
+      setFormData({ name: '', description: '', image: '' });
     }
     setIsModalOpen(true);
   };
@@ -102,6 +109,20 @@ const AdminCategories = () => {
     setEditingProduct(null);
   };
 
+  const handleCategoryImageError = (categoryId) => {
+    setImageErrors(prev => ({
+      ...prev,
+      [categoryId]: true,
+    }));
+  };
+
+  const handleProductImageError = (productId) => {
+    setProductImageErrors(prev => ({
+      ...prev,
+      [productId]: true,
+    }));
+  };
+
   return (
     <div className="p-6 md:p-10">
       {/* Header */}
@@ -141,13 +162,21 @@ const AdminCategories = () => {
               className="bg-white rounded-lg border border-slate-200 p-6 hover:shadow-lg transition-all cursor-pointer group"
             >
               <div className="mb-4">
-                {category.image && (
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-32 object-cover rounded-lg mb-4"
-                  />
-                )}
+                <div className="w-full h-32 bg-slate-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden border border-slate-200">
+                  {!imageErrors[category.id] && category.image ? (
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      onError={() => handleCategoryImageError(category.id)}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <HiOutlinePhoto className="text-slate-400" size={32} />
+                      <span className="text-xs text-slate-400 font-medium">No image</span>
+                    </div>
+                  )}
+                </div>
                 <h3 className="text-lg font-black text-slate-950 mb-2">
                   {category.name}
                 </h3>
@@ -231,13 +260,18 @@ const AdminCategories = () => {
                         onClick={() => handleEditProductFromCategory(product)}
                         className="flex items-center gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-emerald-400 transition-all cursor-pointer group"
                       >
-                        {product.image && (
-                          <img
-                            src={product.image}
-                            alt={product.name || product.title}
-                            className="w-16 h-16 object-cover rounded"
-                          />
-                        )}
+                        <div className="w-16 h-16 bg-slate-100 rounded flex items-center justify-center flex-shrink-0 border border-slate-200">
+                          {!productImageErrors[product.id] && product.image ? (
+                            <img
+                              src={product.image}
+                              alt={product.name || product.title}
+                              onError={() => handleProductImageError(product.id)}
+                              className="w-full h-full object-cover rounded"
+                            />
+                          ) : (
+                            <HiOutlinePhoto className="text-slate-400" size={24} />
+                          )}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-slate-950 truncate group-hover:text-emerald-600 transition-colors">
                             {product.name || product.title}
@@ -309,7 +343,7 @@ const AdminCategories = () => {
                       setFormData({ ...formData, name: e.target.value })
                     }
                     placeholder="Enter category name"
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     required
                   />
                 </div>
@@ -325,8 +359,33 @@ const AdminCategories = () => {
                     }
                     placeholder="Enter category description"
                     rows="3"
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.image}
+                    onChange={(e) =>
+                      setFormData({ ...formData, image: e.target.value })
+                    }
+                    placeholder="https://images.unsplash.com/..."
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm"
+                  />
+                  {formData.image && (
+                    <div className="mt-2">
+                      <img 
+                        src={formData.image} 
+                        alt="Category preview"
+                        className="h-20 rounded border border-slate-200 object-cover"
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-3 pt-4">

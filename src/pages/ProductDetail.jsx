@@ -195,8 +195,11 @@ const ProductDetail = () => {
             <div className="space-y-6 md:space-y-8 bg-slate-50 p-6 md:p-8 lg:p-10 rounded-lg md:rounded-[2.5rem] border border-slate-100">
                <div className="space-y-3 md:space-y-4">
                  <h4 className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-slate-900 border-b border-slate-200 pb-3 md:pb-4">Specifications</h4>
-                 <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-medium italic">
-                   {product.fullDescription || product.description || product.shortDescription}
+                 <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-bold italic mb-4">
+                   {product.description || product.shortDescription}
+                 </p>
+                 <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-medium">
+                   {product.fullDescription}
                  </p>
                </div>
                

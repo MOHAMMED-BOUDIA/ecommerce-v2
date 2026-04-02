@@ -120,9 +120,17 @@ const Profile = () => {
     }
   };
 
+  const handleRemoveAvatar = () => {
+    setUserData(prev => ({
+      ...prev,
+      avatar: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+    }));
+  };
+
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    localStorage.clear(); // Complete wipes all local storage to prevent persistence
+    navigate("/login", { replace: true });
   };
 
   const handleSaveProfile = () => {
@@ -151,7 +159,7 @@ const Profile = () => {
   const stats = [
     { 
       label: "Total Orders", 
-      value: userData.orders.length, 
+      value: realOrders.length, 
       icon: HiOutlineShoppingBag, 
       trend: "Past 12 months",
       color: "text-emerald-500", 
@@ -161,7 +169,7 @@ const Profile = () => {
     },
     { 
       label: "Wishlist Items", 
-      value: wishlistItems.length || 0, 
+      value: wishlistItems.length, 
       icon: HiOutlineHeart, 
       trend: "Synced with store",
       color: "text-rose-500", 
@@ -171,7 +179,7 @@ const Profile = () => {
     },
     { 
       label: "Wallet Balance", 
-      value: `${userData.balance.toLocaleString()} DH`, 
+      value: `${(authUser?.balance || 0).toLocaleString()} DH`, 
       icon: HiOutlineCreditCard, 
       trend: "Credit ready",
       color: "text-blue-500", 
@@ -204,6 +212,18 @@ const Profile = () => {
                 </div>
                 
                 <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleAvatarChange} />
+
+                {userData.avatar !== "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" && (
+                  <motion.button 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    onClick={handleRemoveAvatar}
+                    className="absolute top-0 right-0 w-10 h-10 bg-white text-rose-500 rounded-full border border-slate-100 flex items-center justify-center shadow-lg hover:bg-rose-50 transition-colors z-[30]"
+                    title="Remove Profile Photo"
+                  >
+                    <HiOutlineTrash size={18} />
+                  </motion.button>
+                )}
 
                 <div className="absolute -bottom-2 right-4 px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full border-4 border-white flex items-center gap-1.5 shadow-xl z-20">
                   <HiOutlineShieldCheck size={14} /> Elite

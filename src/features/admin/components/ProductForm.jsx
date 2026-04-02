@@ -147,7 +147,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       required
                     />
                   </div>
@@ -159,7 +159,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                         name="brand"
                         value={formData.brand}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       />
                     </div>
                     <div>
@@ -168,7 +168,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       >
                         {categoryNames.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                       </select>
@@ -188,7 +188,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       name="price"
                       value={formData.price}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       required
                     />
                   </div>
@@ -199,7 +199,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       name="oldPrice"
                       value={formData.oldPrice}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
                   <div>
@@ -209,7 +209,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       name="stock"
                       value={formData.stock}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                       required
                     />
                   </div>
@@ -227,7 +227,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       value={formData.shortDescription}
                       onChange={handleChange}
                       rows="2"
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg resize-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg resize-none text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
                   <div>
@@ -237,7 +237,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                       value={formData.fullDescription}
                       onChange={handleChange}
                       rows="4"
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg resize-none"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg resize-none text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
                 </div>
@@ -287,7 +287,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel }) => {
                   value={formData.tags}
                   onChange={handleChange}
                   placeholder="electronic, mobile, new"
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                 />
               </section>
             </div>

@@ -36,6 +36,17 @@ const ImageUpload = ({ onImageSelect, currentImage = null }) => {
     }
   }, [currentImage]);
 
+  // Handle changes when user types or pastes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (activeTab === 'url' && imageUrl.trim()) {
+        handleUrlSubmit();
+      }
+    }, 800); // Wait for user to stop typing
+
+    return () => clearTimeout(timer);
+  }, [imageUrl, activeTab]);
+
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -71,31 +82,45 @@ const ImageUpload = ({ onImageSelect, currentImage = null }) => {
     e?.preventDefault();
     
     if (!imageUrl.trim()) {
-      setError('Please enter an image URL');
+      setError(null);
       return;
     }
 
-    // Validate URL format
+    // Clean URL (remove trailing spaces, etc)
+    const cleanUrl = imageUrl.trim();
+
+    // Basic URL format check
     try {
-      new URL(imageUrl);
+      new URL(cleanUrl);
     } catch {
-      setError('Please enter a valid image URL');
+      setError('Please enter a valid URL');
       return;
     }
 
-    // Test if image loads
+    // Direct Image Link Validation
+    setIsLoadingUrl(true);
+    setPreview(null);
+    setError(null);
+
     const img = new Image();
     img.onload = () => {
-      setPreview(imageUrl);
+      setIsLoadingUrl(false);
+      setPreview(cleanUrl);
       setUploadedImage(null);
       setError(null);
-      onImageSelect(imageUrl);
+      onImageSelect(cleanUrl);
     };
     img.onerror = () => {
-      setError('Could not load image from URL. Please check the URL and try again.');
+      setIsLoadingUrl(false);
+      setError('Invalid Image: This link doesn\'t point to a direct image file or is blocked by CORS. (Try links from Unsplash, Imgur, or direct .jpg/.png links)');
+      setPreview(null);
+      onImageSelect(null);
     };
-    img.src = imageUrl;
+    img.src = cleanUrl;
   };
+
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false); // Changed name to avoid conflict
+
 
   const handleRemoveImage = () => {
     setPreview(null);
@@ -186,32 +211,52 @@ const ImageUpload = ({ onImageSelect, currentImage = null }) => {
                 Image URL
               </label>
               <div className="flex gap-2">
-                <input
-                  type="url"
-                  placeholder="https://example.com/image.jpg"
-                  value={imageUrl}
-                  onChange={(e) => {
-                    setImageUrl(e.target.value);
-                    setError(null);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleUrlSubmit();
-                    }
-                  }}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                />
+                <div className="relative flex-1">
+                  <input
+                    type="url"
+                    placeholder="https://images.unsplash.com/photo-..."
+                    value={imageUrl}
+                    onChange={(e) => {
+                      setImageUrl(e.target.value);
+                      setError(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleUrlSubmit();
+                      }
+                    }}
+                    className={`w-full pl-4 pr-10 py-2.5 border rounded-xl text-sm transition-all focus:outline-none focus:ring-4 ${
+                      error 
+                        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10 bg-red-50/30' 
+                        : preview && imageUrl.trim()
+                          ? 'border-emerald-300 focus:border-emerald-500 focus:ring-emerald-500/10 bg-emerald-50/30'
+                          : 'border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/10'
+                    }`}
+                  />
+                  {isLoadingUrl && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                  {preview && !error && imageUrl.trim() && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500">
+                      <HiOutlineCheckCircle size={18} />
+                    </div>
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={handleUrlSubmit}
-                  disabled={!imageUrl.trim()}
-                  className="px-4 py-2 bg-emerald-500 text-white font-semibold rounded-lg hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  disabled={!imageUrl.trim() || isLoadingUrl}
+                  className="px-6 py-2.5 bg-slate-900 text-white text-xs font-black uppercase italic tracking-widest rounded-xl hover:bg-emerald-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-lg shadow-slate-900/10"
                 >
-                  Load Image
+                  {isLoadingUrl ? 'Testing...' : 'Load Image'}
                 </button>
               </div>
-              <p className="text-xs text-slate-500 mt-1">Paste a direct image URL and click "Load Image"</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2 px-1">
+                Tip: Use direct links ending in .jpg, .png, or .webp
+              </p>
             </div>
           </div>
         </motion.div>

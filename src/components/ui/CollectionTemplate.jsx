@@ -4,7 +4,6 @@ import {
   HiOutlineAdjustmentsHorizontal,
   HiOutlineEye,
   HiOutlineFire,
-  HiOutlineQueueList,
   HiOutlineShoppingBag,
   HiOutlineSquares2X2,
   HiOutlineStar,
@@ -51,7 +50,6 @@ const CollectionTemplate = ({
   loading,
   emptyMessage = "No active intel found for these parameters.",
 }) => {
-  const [viewMode, setViewMode] = useState("grid");
   const [activeCategory, setActiveCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,11 +140,10 @@ const CollectionTemplate = ({
             </p>
           </div>
 
-          <div className="hidden md:grid gap-4 sm:grid-cols-3">
+          <div className="hidden md:grid gap-4 sm:grid-cols-2">
             {[
               { label: "Total", value: String(products.length).padStart(2, "0"), suffix: "Products" },
               { label: "Avg Rating", value: avgRating, suffix: "Stars" },
-              { label: "Display", value: viewMode === "grid" ? "Grid" : "List", suffix: "Mode" },
             ].map((stat) => (
               <motion.div
                 key={stat.label}
@@ -199,45 +196,6 @@ const CollectionTemplate = ({
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-1.5 md:gap-2 rounded-full border border-slate-200 bg-white p-1 md:p-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
-                role="group"
-                aria-label="View Mode Toggle"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode("grid")}
-                  aria-label="Grid View"
-                  aria-pressed={viewMode === "grid"}
-                  className={`flex h-8 md:h-11 w-8 md:w-11 items-center justify-center rounded-full transition-all duration-300 ${
-                    viewMode === "grid"
-                      ? "bg-slate-950 text-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
-                      : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                  }`}
-                  title="Grid view"
-                >
-                  <HiOutlineSquares2X2 size={16} className="md:w-[18px] md:h-[18px]" aria-hidden="true" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setViewMode("list")}
-                  aria-label="List View"
-                  aria-pressed={viewMode === "list"}
-                  className={`flex h-8 md:h-11 w-8 md:w-11 items-center justify-center rounded-full transition-all duration-300 ${
-                    viewMode === "list"
-                      ? "bg-slate-950 text-white shadow-[0_8px_24px_rgba(15,23,42,0.12)]"
-                      : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                  }`}
-                  title="List view"
-                >
-                  <HiOutlineQueueList size={16} className="md:w-[18px] md:h-[18px]" aria-hidden="true" />
-                </motion.button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
                 className="inline-flex items-center gap-1 md:gap-1.5 rounded-full border border-slate-200 bg-gradient-to-r from-white to-slate-50/80 px-1 md:px-1.5 py-1 md:py-1.5 shadow-[0_12px_35px_rgba(15,23,42,0.06)] backdrop-blur-xs"
               >
@@ -284,16 +242,11 @@ const CollectionTemplate = ({
           <AnimatePresence mode="popLayout">
             <motion.div
               layout
-              className={
-                viewMode === "grid"
-                  ? "mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4 xl:gap-10"
-                  : "mt-12 flex flex-col gap-8"
-              }
+              className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4 xl:gap-10"
             >
               {currentProducts.map((product) => {
                 const categoryLabel = formatCategoryLabel(product.category);
                 const ratingValue = Number.parseFloat(product.rating?.rate || 0).toFixed(1);
-                const reviewCount = product.rating?.count || 0;
                 const formattedPrice = formatPrice(product.price);
                 const description = product.shortDescription || product.description;
                 const detailSlug = product.slug || product.id;
@@ -306,12 +259,10 @@ const CollectionTemplate = ({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     whileHover={{ y: -10 }}
-                    className={`group relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.06)] transition-all duration-500 hover:border-emerald-200 hover:shadow-[0_28px_80px_rgba(15,23,42,0.12)] hover:bg-slate-50/50 ${
-                      viewMode === "list" ? "lg:flex lg:items-stretch" : ""
-                    }`}
+                    className="group relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.06)] transition-all duration-500 hover:border-emerald-200 hover:shadow-[0_28px_80px_rgba(15,23,42,0.12)] hover:bg-slate-50/50"
                   >
-                    <div className={`relative ${viewMode === "list" ? "lg:w-[42%]" : ""}`}>
-                      <CollectionImage src={product.image} alt={product.name || product.title} viewMode={viewMode} />
+                    <div className="relative">
+                      <CollectionImage src={product.image} alt={product.name || product.title} viewMode="grid" />
                       
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -350,7 +301,7 @@ const CollectionTemplate = ({
                       </div>
                     </div>
 
-                    <div className={`flex flex-1 flex-col justify-between p-4 md:p-5 ${viewMode === "list" ? "lg:p-6" : ""}`}>
+                    <div className="flex flex-1 flex-col justify-between p-4 md:p-5">
                       <div className="space-y-3">
                         <div className="flex flex-wrap items-center gap-1.5 text-[7px] font-black uppercase tracking-[0.3em] text-slate-500">
                           <span className="rounded-full bg-slate-100 px-2 py-0.5">

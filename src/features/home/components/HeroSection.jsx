@@ -9,7 +9,7 @@ import Button from '../../../components/ui/Button';
  */
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen md:min-h-screen py-16 md:py-24 lg:py-32 flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]">
+    <section className="relative min-h-[100svh] py-12 md:py-24 lg:py-32 flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]">
       {/* Immersive Background Layer */}
       <motion.div
         initial={{ scale: 1.15, opacity: 0 }}
@@ -20,11 +20,11 @@ const HeroSection = () => {
         <img
           src="https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=2600&auto=format&fit=crop"
           alt="Campaign Hero"
-          className="w-full h-full object-cover scale-105"
+          className="w-full h-full object-cover object-center md:scale-105 scale-110"
         />
         {/* Layered Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-black/60" />
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
       </motion.div>
 
       {/* Decorative Technical Borders - Cinematic Framing */}
@@ -32,50 +32,49 @@ const HeroSection = () => {
       <div className="absolute top-6 md:top-12 left-4 md:left-12 right-4 md:right-12 bottom-12 border border-white/5 pointer-events-none z-10 hidden lg:block rounded-[2rem]" />
 
       {/* Content Container */}
-      <div className="container-custom relative z-20 flex flex-col items-center justify-center px-4 md:px-6 text-center h-full">
+      <div className="container-custom relative z-20 flex flex-col items-center justify-center px-4 md:px-6 text-center h-full w-full">
         <motion.div
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-7xl mx-auto flex flex-col items-center"
+          className="w-full max-w-[92vw] sm:max-w-2xl md:max-w-4xl lg:max-w-7xl mx-auto flex flex-col items-center"
         >
           {/* Top Label / Campaign ID */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-8 md:mb-12">
-            <div className="w-8 md:w-12 h-[1px] bg-white/20" />
-            <span className="text-[8px] md:text-sm font-black uppercase tracking-[0.5em] md:tracking-[1em] text-white/50 animate-pulse px-4 md:px-0">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-8 md:mb-12">
+            <div className="w-8 md:w-12 h-[1px] bg-white/20 hidden md:block" />
+              <span className="text-[7px] md:text-sm font-black uppercase tracking-[0.4em] md:tracking-[1em] text-white/50 animate-pulse px-4 md:px-0">
               // DROP 08: THE VANGUARD ARCHIVE
             </span>
-            <div className="w-8 md:w-12 h-[1px] bg-white/20" />
+            <div className="w-8 md:w-12 h-[1px] bg-white/20 hidden md:block" />
           </div>
 
           {/* Massive Dominant Headline */}
-          <h1 className="text-[9vw] md:text-[10vw] lg:text-[11vw] font-black text-white leading-[0.75] md:leading-[0.8] uppercase italic tracking-tighter -indent-[0.05em] mb-8 md:mb-12 drop-shadow-2xl px-2 md:px-0">     
+          <h1 className="text-[14vw] sm:text-[11vw] md:text-[10vw] lg:text-[11vw] font-black text-white leading-[0.95] sm:leading-[0.8] uppercase italic tracking-tighter -indent-[0.05em] mb-8 md:mb-12 drop-shadow-2xl px-1 md:px-0 break-words text-center">     
             ARCHITECTING<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/40 to-white/10 uppercase">UTILITY.</span>
           </h1>
 
           {/* Refined Narrative Text */}
-          <div className="max-w-2xl mx-auto space-y-12 md:space-y-16 px-4 md:px-0">
-            <p className="text-white/40 text-xs md:text-sm lg:text-lg font-medium italic leading-relaxed tracking-wider">
+          <div className="w-full max-w-[85vw] sm:max-w-xl md:max-w-2xl mx-auto space-y-10 md:space-y-16 px-2 md:px-0">
+            <p className="text-white/60 md:text-white/40 text-[10px] md:text-sm lg:text-lg font-medium italic leading-relaxed tracking-wider">
               Engineering the intersection of high-performance technical fabrics 
               and elite urban aesthetics. A manifestation of absolute intent.        
             </p>
 
             {/* High-Impact CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 lg:gap-8 pt-4 md:pt-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-8 pt-4 md:pt-6">
               <Button
                 as={Link}
                 to="/shop" 
-                className="w-full sm:w-72 lg:w-80 h-14 md:h-20 lg:h-24 rounded-none bg-white text-black hover:bg-zinc-200 transition-all duration-700 uppercase italic font-black text-xs md:text-sm tracking-[0.2em] md:tracking-[0.4em] shadow-2xl"
+                className="w-full sm:w-64 md:w-72 lg:w-80 h-14 md:h-20 lg:h-24 rounded-none bg-white text-black hover:bg-zinc-200 transition-all duration-700 uppercase italic font-black text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.4em] shadow-2xl"
               >
                 <span className="relative z-10">Enter Archive</span>
-                <div className="absolute inset-0 bg-emerald-500/20 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700" />
               </Button>
               <Button
                 as={Link}
                 to="/about"
                 variant="transparent"
-                className="w-full sm:w-72 lg:w-80 h-14 md:h-20 lg:h-24 rounded-none border border-white/10 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-1000 uppercase italic font-black text-xs md:text-sm tracking-[0.2em] md:tracking-[0.4em]"
+                className="w-full sm:w-64 md:w-72 lg:w-80 h-14 md:h-20 lg:h-24 rounded-none border border-white/10 text-white hover:bg-white/10 hover:border-white/40 transition-all duration-1000 uppercase italic font-black text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.4em]"
               >
                 Intel Report
               </Button>

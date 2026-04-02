@@ -14,6 +14,7 @@ import clsx from "clsx";
 import PremiumSearchOverlay from "../ui/PremiumSearchOverlay";
 
 const NAV_LINKS = [
+  { name: "Home", path: "/" },
   { name: "Shop All", path: "/shop" },
   { name: "New Arrivals", path: "/new-arrivals" },
   { name: "Tactical Gears", path: "/tactical-gears" },
@@ -28,6 +29,7 @@ const Navbar = memo(() => {
 
   const { items } = useSelector((state) => state.cart || { items: [] });
   const { items: wishlistItems } = useSelector((state) => state.wishlist || { items: [] });
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const cartCount = items ? items.reduce((acc, item) => acc + item.quantity, 0) : 0;
   const wishlistCount = wishlistItems ? wishlistItems.length : 0;
@@ -95,20 +97,20 @@ const Navbar = memo(() => {
               </span>
             </Link>
 
-            <ul className="hidden lg:flex items-center gap-10">
+            <ul className="hidden lg:flex items-center gap-12">
               {NAV_LINKS.map((link) => (
                 <li key={link.name}>
                   <NavLink
                     to={link.path}
                     onClick={() => handleNavLinkClick(link.path)}
                     className={({ isActive }) => clsx(
-                        "text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300 flex items-center gap-2 relative group",
+                        "text-[12px] font-black uppercase tracking-[0.4em] transition-all duration-300 flex items-center gap-2 relative group italic",
                         isActive ? "text-emerald-400" : "text-white/70 hover:text-white"
                       )
                     }
                   >
                     {link.name}
-                    <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-all duration-500 group-hover:w-full" />
+                    <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.9)] transition-all duration-500 group-hover:w-full" />
                   </NavLink>
                 </li>
               ))}
@@ -123,7 +125,7 @@ const Navbar = memo(() => {
                 <HiOutlineMagnifyingGlass size={16} className="sm:w-[18px] sm:h-[18px] md:w-[20px] md:h-[20px]" />
               </button>
 
-              <Link to="/profile" onClick={(e) => handleNavLinkClick("/profile", e)} aria-label="Profile" className="w-8 sm:w-9 md:w-11 h-8 sm:h-9 md:h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300">
+              <Link to={isAuthenticated ? "/profile" : "/login"} onClick={(e) => handleNavLinkClick(isAuthenticated ? "/profile" : "/login", e)} aria-label="Profile" className="w-8 sm:w-9 md:w-11 h-8 sm:h-9 md:h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300">
                 <HiOutlineUser size={16} className="sm:w-[18px] sm:h-[18px] md:w-[20px] md:h-[20px]" />
               </Link>
 

@@ -143,7 +143,7 @@ const ProductDetails = () => {
                         icon={<HiOutlineShoppingBag />}
                         className="flex-1 h-20 rounded-[2rem] text-xl font-black"
                      >
-                        Add to Cart  ${(product.price * quantity).toFixed(2)}
+                        Add to Cart  {(product.price * quantity).toFixed(2)} DH
                      </Button>
                   </div>
                </div>

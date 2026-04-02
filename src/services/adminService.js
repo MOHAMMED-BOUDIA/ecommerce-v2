@@ -25,109 +25,58 @@ export const adminCategoryService = {
   delete: (id) => categoryDataService.delete(id),
 };
 
-// ===== ORDERS =====
+// ===== ORDERS - Real data from orderService =====
 export const adminOrderService = {
   getAll: () => {
     try {
-      const stored = localStorage.getItem('admin_orders');
-      if (stored) return JSON.parse(stored);
-    } catch {
-      // Continue with mock data on error
+      const { orderService } = require('../features/orders/orderService');
+      return orderService.getAll();
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return [];
     }
-    
-    // Mock orders data
-    return [
-      {
-        id: 'ORD-001',
-        customer: 'John Doe',
-        email: 'john@example.com',
-        total: 2500,
-        status: 'Completed',
-        items: 3,
-        date: '2026-03-20',
-      },
-      {
-        id: 'ORD-002',
-        customer: 'Jane Smith',
-        email: 'jane@example.com',
-        total: 5800,
-        status: 'Pending',
-        items: 5,
-        date: '2026-03-25',
-      },
-      {
-        id: 'ORD-003',
-        customer: 'Alex Johnson',
-        email: 'alex@example.com',
-        total: 1200,
-        status: 'Shipped',
-        items: 2,
-        date: '2026-03-22',
-      },
-      {
-        id: 'ORD-004',
-        customer: 'Mike Wilson',
-        email: 'mike@example.com',
-        total: 3400,
-        status: 'Completed',
-        items: 4,
-        date: '2026-03-18',
-      },
-    ];
   },
 
   getTotalCount: () => adminOrderService.getAll().length,
+  
   getTotalRevenue: () => {
-    return adminOrderService.getAll().reduce((sum, o) => sum + o.total, 0);
+    return adminOrderService.getAll().reduce((sum, order) => sum + (order.total || 0), 0);
+  },
+  
+  getRecentOrders: (limit = 5) => {
+    return adminOrderService.getAll()
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, limit);
   },
 };
 
-// ===== USERS =====
+// ===== USERS - Real data from localStorage =====
 export const adminUserService = {
   getAll: () => {
     try {
-      const stored = localStorage.getItem('admin_users');
+      const stored = localStorage.getItem('vanguard_users');
       if (stored) return JSON.parse(stored);
-    } catch {
-      // Continue with mock data on error
+    } catch (error) {
+      console.error('Error reading users from storage:', error);
     }
+    return [];
+  },
 
-    // Mock users data
-    return [
-      {
-        id: 'ADMIN-001',
-        name: 'Admin User',
-        email: 'admin@vanguard.io',
-        role: 'admin',
-        status: 'Active',
-        joinDate: '2025-01-01',
-      },
-      {
-        id: 'USER-001',
-        name: 'John Doe',
-        email: 'john@example.com',
-        role: 'user',
-        status: 'Active',
-        joinDate: '2026-02-15',
-      },
-      {
-        id: 'USER-002',
-        name: 'Jane Smith',
-        email: 'jane@example.com',
-        role: 'user',
-        status: 'Active',
-        joinDate: '2026-03-01',
-      },
-      {
-        id: 'USER-003',
-        name: 'Alex Johnson',
-        email: 'alex@example.com',
-        role: 'user',
-        status: 'Inactive',
-        joinDate: '2026-01-20',
-      },
-    ];
+  addUser: (user) => {
+    const users = adminUserService.getAll();
+    const newUser = {
+      id: `USER-${Date.now()}`,
+      ...user,
+      joinDate: new Date().toISOString().split('T')[0],
+    };
+    users.push(newUser);
+    localStorage.setItem('vanguard_users', JSON.stringify(users));
+    return newUser;
   },
 
   getTotalCount: () => adminUserService.getAll().length,
+  
+  getActiveUsers: () => {
+    return adminUserService.getAll().filter(user => user.status === 'Active');
+  },
 };

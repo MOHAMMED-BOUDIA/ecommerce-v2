@@ -16,6 +16,7 @@ const ProductCard = memo(({ product }) => {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     dispatch(addItem({ ...product, quantity: 1 }));
     toast.success(`${title} added to bag!`, {
       icon: <HiOutlineShoppingBag className="text-emerald-500" />,
@@ -24,6 +25,7 @@ const ProductCard = memo(({ product }) => {
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (isInWishlist) {
       dispatch(removeFromWishlist(id));
       toast.success("Removed from Archive");
@@ -48,18 +50,19 @@ const ProductCard = memo(({ product }) => {
   }, [image]);
 
   return (
-    <article 
+    <RouterLink 
+      to={`/product/${slug || id}`}
       className="group block bg-white rounded-[2rem] overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100 relative"
     >
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-slate-50 p-6 flex items-center justify-center">
-        <RouterLink to={`/product/${slug || id}`} className="block w-full h-full" aria-label={`View details for ${title}`}>
+        <div className="block w-full h-full" aria-label={`View details for ${title}`}>
           <img
             src={optimizedImage}
             alt={title}
             className="h-full w-full object-contain group-hover:scale-110 transition-transform duration-700"
           />
-        </RouterLink>
+        </div>
 
         {/* Wishlist Link/Button */}
         <button 
@@ -108,8 +111,12 @@ const ProductCard = memo(({ product }) => {
         </div>
         
         <h3 className="text-lg font-black text-slate-950 line-clamp-1 uppercase italic tracking-tighter">
-          <RouterLink to={`/product/${slug || id}`}>{title}</RouterLink>
+          {title}
         </h3>
+
+        <p className="text-slate-500 text-[10px] leading-relaxed font-medium line-clamp-2 italic">
+          {product.description || product.shortDescription}
+        </p>
         
         <div className="flex items-center gap-3">
           <p className="text-xl font-black text-slate-900 italic tracking-tighter">
@@ -122,7 +129,7 @@ const ProductCard = memo(({ product }) => {
           )}
         </div>
       </div>
-    </article>
+    </RouterLink>
   );
 });
 

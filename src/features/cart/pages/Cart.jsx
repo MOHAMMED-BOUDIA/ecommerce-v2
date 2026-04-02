@@ -125,22 +125,22 @@ const Cart = () => {
                  <div className="space-y-8 relative z-10">
                     <div className="flex justify-between items-center text-white/40 font-bold uppercase tracking-widest text-xs">
                        <span>Subtotal</span>
-                       <span className="text-white text-lg">${subtotal.toFixed(2)}</span>
+                       <span className="text-white text-lg">{subtotal.toFixed(2)} DH</span>
                     </div>
                     <div className="flex justify-between items-center text-white/40 font-bold uppercase tracking-widest text-xs">
                        <span>Shipping Est.</span>
-                       <span className="text-white text-lg">{shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}</span>
+                       <span className="text-white text-lg">{shipping === 0 ? "FREE" : `${shipping.toFixed(2)} DH`}</span>
                     </div>
                     <div className="flex justify-between items-center text-white/40 font-bold uppercase tracking-widest text-xs">
                        <span>Tax (8%)</span>
-                       <span className="text-white text-lg">${tax.toFixed(2)}</span>
+                       <span className="text-white text-lg">{tax.toFixed(2)} DH</span>
                     </div>
                     
                     <div className="h-px bg-white/10 my-10" />
                     
                     <div className="flex justify-between items-end">
                        <span className="text-white/40 font-black uppercase text-xs tracking-widest pb-1">Total Due</span>
-                       <span className="text-4xl font-black text-emerald-400 tracking-tighter leading-none">${total.toFixed(2)}</span>
+                       <span className="text-4xl font-black text-emerald-400 tracking-tighter leading-none">{total.toFixed(2)} DH</span>
                     </div>
 
                     <div className="pt-10 space-y-4">

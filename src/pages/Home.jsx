@@ -983,7 +983,7 @@ const Home = () => {
                   { param: "Charge Time", p1: "6h", p2: "3.5h", p3: "5h", p4: "2.9h" },
                   { param: "Mobility Score", p1: "7.4", p2: "9.6", p3: "8.2", p4: "9.8" },
                   { param: "Best For", p1: "Daily base use", p2: "All-round premium", p3: "Transit & travel", p4: "High-frequency ops" },
-                  { param: "Price Tier", p1: "$750", p2: "$1,450", p3: "$980", p4: "$2,100" },
+                  { param: "Price Tier", p1: "750 DH", p2: "1,450 DH", p3: "980 DH", p4: "2,100 DH" },
                 ].map((row, index) => (
                   <tr key={row.param} className={`group transition-colors duration-300 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-emerald-500/[0.03]`}>
                     <td className="px-8 py-5 align-middle">
